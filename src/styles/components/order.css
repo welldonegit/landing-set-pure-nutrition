@@ -46,6 +46,22 @@
   background: #fafaf8;
 }
 
+/* Стани помилки. Поки поле коректне, підпис прихований і на розкладку не впливає. */
+.field__control.is-invalid {
+  border-color: var(--danger);
+}
+
+.field__error {
+  display: block;
+  font: 600 12px var(--font);
+  color: var(--danger);
+  margin-top: 6px;
+}
+
+.field__error[hidden] {
+  display: none;
+}
+
 /* ---- спосіб оплати ---- */
 .pay {
   display: flex;
@@ -156,17 +172,38 @@
   border-top: 1px solid var(--line);
 }
 
+/* Це <button type="submit">: скидаємо рамку й курсор,
+   решта декларацій успадкована від колишнього посилання. */
 .order-form__submit {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 14px;
+  width: 100%;
+  border: 0;
+  cursor: pointer;
   background: var(--accent);
   color: var(--ink);
   text-decoration: none;
   font: 800 18px var(--font);
   padding: 16px;
   border-radius: 99px;
+}
+
+.order-form__status {
+  display: block;
+  font: 600 13px/1.45 var(--font);
+  color: var(--accent-ink);
+  text-align: center;
+  margin: 12px 0 0;
+}
+
+.order-form__status--error {
+  color: var(--danger);
+}
+
+.order-form__status[hidden] {
+  display: none;
 }
 
 .order-form__submit-icon {

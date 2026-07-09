@@ -47,7 +47,7 @@
 }
 
 .compare__mark--bad {
-  color: #c0506a;
+  color: var(--danger);
 }
 
 .compare__mark--good {

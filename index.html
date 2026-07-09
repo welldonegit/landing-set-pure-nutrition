@@ -394,15 +394,34 @@
       <!-- form -->
       <div class="order-form">
         <div class="order-form__header">Ваше замовлення</div>
-        <div class="order-form__body">
-          <div class="field"><label class="field__label">Ім'я та прізвище</label><input class="field__control" placeholder="Ім'я та прізвище"></div>
-          <div class="field"><label class="field__label">Телефон</label><input class="field__control" placeholder="+38 (0__) ___ __ __"></div>
-          <div class="field"><label class="field__label">Email</label><input class="field__control" type="email" placeholder="you@email.com"></div>
-          <div class="field"><label class="field__label">Розмір собаки</label><select class="field__control"><option>Дрібна порода (сет 3×300 г)</option><option>Середня / велика порода (сет 3×300 г)</option></select></div>
-          <div class="field"><label class="field__label">Відділення Нової Пошти</label><input class="field__control" placeholder="Місто, № відділення"></div>
+        <form class="order-form__body" data-js="order-form" novalidate>
+          <div class="field">
+            <label class="field__label" for="order-name">Ім'я та прізвище</label>
+            <input class="field__control" id="order-name" name="name" autocomplete="name" placeholder="Ім'я та прізвище" aria-describedby="order-name-error">
+            <span class="field__error" id="order-name-error" data-js="error-name" hidden></span>
+          </div>
+          <div class="field">
+            <label class="field__label" for="order-phone">Телефон</label>
+            <input class="field__control" id="order-phone" name="phone" type="tel" placeholder="+38(0__)-___-____" aria-describedby="order-phone-error">
+            <span class="field__error" id="order-phone-error" data-js="error-phone" hidden></span>
+          </div>
+          <div class="field">
+            <label class="field__label" for="order-email">Email</label>
+            <input class="field__control" id="order-email" name="email" type="email" autocomplete="email" placeholder="you@email.com" aria-describedby="order-email-error">
+            <span class="field__error" id="order-email-error" data-js="error-email" hidden></span>
+          </div>
+          <div class="field">
+            <label class="field__label" for="order-size">Розмір собаки</label>
+            <select class="field__control" id="order-size" name="size"><option>Дрібна порода (сет 3×300 г)</option><option>Середня / велика порода (сет 3×300 г)</option></select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="order-branch">Відділення Нової Пошти</label>
+            <input class="field__control" id="order-branch" name="branch" placeholder="Місто, № відділення" aria-describedby="order-branch-error">
+            <span class="field__error" id="order-branch-error" data-js="error-branch" hidden></span>
+          </div>
 
           <!-- payment method -->
-          <div class="field"><label class="field__label">Спосіб оплати</label>
+          <div class="field"><span class="field__label">Спосіб оплати</span>
             <div class="pay">
               <button type="button" class="pay__btn is-active" data-js="pay-method" data-method="cod">Накладений платіж</button>
               <button type="button" class="pay__btn" data-js="pay-method" data-method="online">Онлайн оплата</button>
@@ -418,9 +437,10 @@
           </div>
 
           <div class="order-form__total"><span>Разом</span><span data-js="order-total"></span></div>
-          <a class="order-form__submit" href="#">Підтвердити замовлення<span class="order-form__submit-icon">↗</span></a>
+          <button type="submit" class="order-form__submit">Підтвердити замовлення<span class="order-form__submit-icon">↗</span></button>
+          <p class="order-form__status" data-js="order-status" role="status" hidden></p>
           <p class="order-form__note" data-js="pay-note"></p>
-        </div>
+        </form>
       </div>
       <!-- value stack -->
       <div>

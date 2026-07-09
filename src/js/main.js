@@ -11,6 +11,7 @@ import { initUpsell } from './features/upsell.js';
 import { initPaymentMethod } from './features/payment-method.js';
 import { initCalculator } from './features/calculator.js';
 import { initPriceTable } from './features/price-table.js';
+import { initOrderForm } from './form/order-form.js';
 
 // Кожен init самостійно перевіряє наявність своєї розмітки і мовчки
 // виходить, якщо її немає. Порядок викликів не має значення.
@@ -23,5 +24,4 @@ initUpsell();
 initPaymentMethod();
 initCalculator();
 initPriceTable();
-
-// form/ поки не підключено — див. src/js/form/order-form.js (крок 4).
+initOrderForm();
