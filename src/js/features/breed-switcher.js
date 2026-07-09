@@ -1,4 +1,5 @@
 import { SETS } from '../data/products.js';
+import { qs } from '../utils/dom.js';
 
 const FLAVORS = ['beef', 'turkey', 'salmon'];
 
@@ -14,10 +15,11 @@ export const onBreedChange = (fn) => listeners.add(fn);
 const packSrc = (flavor) =>
   `images/pack-${flavor}${breed === 'large' ? '-large' : ''}.jpg`;
 
+/** Перемикач лінійки: міняє фото пачок, вміст м'яса та підпис гранули. */
 export function initBreedSwitcher(root = document) {
-  const smallBtn = root.querySelector('[data-js="breed-small"]');
-  const largeBtn = root.querySelector('[data-js="breed-large"]');
-  const granuleEl = root.querySelector('[data-js="granule"]');
+  const smallBtn = qs('breed-small', root);
+  const largeBtn = qs('breed-large', root);
+  const granuleEl = qs('granule', root);
   if (!smallBtn || !largeBtn || !granuleEl) return;
 
   const render = () => {
@@ -29,8 +31,8 @@ export function initBreedSwitcher(root = document) {
     granuleEl.textContent = set.granule;
 
     for (const flavor of FLAVORS) {
-      const img = root.querySelector(`[data-js="pack-${flavor}"]`);
-      const meat = root.querySelector(`[data-js="meat-${flavor}"]`);
+      const img = qs(`pack-${flavor}`, root);
+      const meat = qs(`meat-${flavor}`, root);
       if (img) img.src = packSrc(flavor);
       if (meat) meat.textContent = set[flavor].meat;
     }

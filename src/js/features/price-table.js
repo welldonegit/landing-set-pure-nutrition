@@ -1,4 +1,5 @@
-import { PRICE, PRICE_ROWS, formatPrice, packSizes } from '../data/prices.js';
+import { PRICE, PRICE_ROWS, packSizes } from '../data/prices.js';
+import { formatPrice } from '../utils/format.js';
 
 // Колонки з цінами: перша приглушена, остання — акцентна.
 const CELL_MODIFIERS = ['muted', 'regular', 'strong'];
@@ -25,6 +26,7 @@ function buildRow(line, { flavor, emoji, name }) {
   return row;
 }
 
+/** Дві таблиці цін: для великих і для малих порід. */
 export function initPriceTable(root = document) {
   for (const line of ['large', 'small']) {
     const body = root.querySelector(`[data-js="price-rows"][data-line="${line}"]`);

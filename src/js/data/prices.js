@@ -31,11 +31,6 @@ export const PRICE_ROWS = [
   { flavor: 'beef', emoji: '🥩', name: 'Соковита яловичина' },
 ];
 
-/** Нерозривний пробіл як роздільник тисяч: 2164 -> "2 164". */
-export function formatPrice(n) {
-  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-}
-
 /** Фасування лінійки за зростанням: small -> [1,3,5], large -> [1,5,10]. */
 export function packSizes(line, flavor) {
   return Object.keys(PRICE[line][flavor])

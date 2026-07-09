@@ -1,10 +1,12 @@
+import { qs } from '../utils/dom.js';
+
 /** Десктопна стрічка відгуків: прокрутка на ~85% ширини видимої області. */
 const STEP_RATIO = 0.85;
 
 export function initReviewsSlider(root = document) {
-  const track = root.querySelector('[data-js="reviews-track"]');
-  const prev = root.querySelector('[data-js="reviews-prev"]');
-  const next = root.querySelector('[data-js="reviews-next"]');
+  const track = qs('reviews-track', root);
+  const prev = qs('reviews-prev', root);
+  const next = qs('reviews-next', root);
   if (!track || !prev || !next) return;
 
   const scrollBy = (direction) =>
