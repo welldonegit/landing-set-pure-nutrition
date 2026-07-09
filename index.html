@@ -7,194 +7,126 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
-<style>
-  body{margin:0;font-family:'Montserrat',-apple-system,Arial,sans-serif;color:#15140f;background:#f6f5f0;line-height:1.55}
-  *{box-sizing:border-box}
-  @keyframes pn-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-  @keyframes pn-spin{to{transform:rotate(360deg)}}
-  @keyframes pn-bowl-raw{0%,34%{opacity:1;transform:scale(1) rotate(0deg)}48%,86%{opacity:0;transform:scale(.9) rotate(-6deg)}100%{opacity:1;transform:scale(1) rotate(0deg)}}
-  @keyframes pn-bowl-kibble{0%,34%{opacity:0;transform:scale(.9) rotate(6deg)}48%,86%{opacity:1;transform:scale(1) rotate(0deg)}100%{opacity:0;transform:scale(.9) rotate(6deg)}}
-  @keyframes pn-bowl-ring{0%,38%{opacity:0;transform:scale(.72) rotate(0deg)}43%{opacity:.9}53%,81%{opacity:0}57%{opacity:.9;transform:scale(1.08) rotate(80deg)}88%{opacity:0;transform:scale(.72) rotate(120deg)}100%{opacity:0}}
-  @keyframes pn-label-a{0%,38%{opacity:1}48%,100%{opacity:0}}
-  @keyframes pn-label-b{0%,40%{opacity:0}50%,90%{opacity:1}100%{opacity:0}}
-  #revTrack::-webkit-scrollbar{display:none}
-
-  /* ============ RESPONSIVE / MOBILE ============
-     Правила чіпляються за data-rs, а не за вміст атрибута style.
-     Інлайнові стилі виграють за специфічністю, тому потрібен !important;
-     він зникне разом з інлайновими стилями на наступному етапі. */
-  @media (max-width: 1024px){
-    /* декоративні бейджі героя мають жорсткі px-зсуви — ховаємо, щоб не було переповнення */
-    [data-rs~="hero-badge"]{display:none !important;}
-  }
-  @media (max-width: 860px){
-    /* багатоколонкові сітки в одну колонку */
-    [data-rs~="stack"]{grid-template-columns:1fr !important;}
-    [data-rs~="stack-gap"]{gap:34px !important;}
-    [data-rs~="grid-4"]{grid-template-columns:repeat(2,1fr) !important;}
-    [data-rs~="grid-icon"]{grid-template-columns:1fr !important;gap:12px !important;justify-items:start !important;}
-
-    /* бічні та блокові відступи */
-    [data-rs~="pad-side"]{padding-left:20px !important;padding-right:20px !important;}
-    [data-rs~="pad-hero"]{padding:32px 20px 44px !important;}
-    [data-rs~="pad-timer"]{padding:34px 22px !important;}
-    [data-rs~="pad-bonus"]{padding:30px 22px !important;}
-    [data-rs~="pad-guarantee"]{padding:28px 22px !important;}
-    [data-rs~="pad-card"]{padding:22px !important;}
-    [data-rs~="bleed"]{margin:28px 0px 0px !important;}
-
-    /* зменшуємо завеликий кегль */
-    [data-rs~="fs-54"]{font-size:32px !important;}
-    [data-rs~="fs-58"]{font-size:40px !important;}
-    [data-rs~="fs-42"]{font-size:27px !important;}
-    [data-rs~="fs-40-800"]{font-size:26px !important;}
-    [data-rs~="fs-40-900"]{font-size:29px !important;}
-    [data-rs~="fs-34"]{font-size:25px !important;}
-    [data-rs~="fs-46"]{font-size:32px !important;}
-    [data-rs~="fs-52"]{font-size:38px !important;}
-    [data-rs~="fs-76"]{font-size:52px !important;}
-
-    /* відліпляємо ліву колонку, щоб миска не перекривала список */
-    [data-rs~="unstick"]{position:static !important;}
-
-    /* відгуки: замість десктопної стрічки — компактна мозаїка з горизонтальним свайпом */
-    #revRail{display:none !important;}
-    #revGrid{display:grid !important;grid-auto-flow:column !important;grid-template-rows:repeat(2, 104px) !important;grid-auto-columns:104px !important;gap:8px !important;overflow-x:auto !important;overflow-y:hidden !important;padding-bottom:6px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-    #revGrid::-webkit-scrollbar{display:none;}
-    #revGridHint{display:block !important;}
-
-    /* ховаємо десктопні елементи керування */
-    [data-rs~="nav-links"]{display:none !important;}
-    [data-rs~="rail-arrow"]{display:none !important;}
-
-    /* компактний сегментований перемикач */
-    [data-rs~="seg-btn"]{padding:10px 14px !important;font-size:13px !important;}
-  }
-  @media (max-width: 520px){
-    [data-rs~="grid-4"]{grid-template-columns:1fr !important;}
-    [data-rs~="divider"]{display:none !important;}
-    [data-rs~="timer-box"]{min-width:0 !important;flex:1 !important;}
-  }
-</style>
+<link rel="stylesheet" href="/src/styles/index.css">
 </head>
 <body>
 
-<div style="background:#f6f5f0">
+<div class="page">
 
 <!-- ============ NAV ============ -->
-<header style="background:#f6f5f0;border-bottom:1px solid #e6e5df;position:sticky;top:0;z-index:40">
-  <div data-rs="pad-side" style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:18px 40px">
-    <div style="display:flex;align-items:center;gap:16px">
-      <img src="images/logo.svg" alt="Pure Nutrition" style="height:38px;width:auto;display:block">
-      <div data-rs="divider" style="font:700 12px 'Montserrat';color:#8a8d86;line-height:1.2;border-left:1px solid #dad9d2;padding-left:16px">Сухий повнораціонний корм<br>преміум класу для собак</div>
+<header class="site-header">
+  <div class="header__inner">
+    <div class="header__brand">
+      <img class="header__logo" src="images/logo.svg" alt="Pure Nutrition">
+      <div class="header__tagline">Сухий повнораціонний корм<br>преміум класу для собак</div>
     </div>
-    <div style="display:flex;align-items:center;gap:28px">
-      <nav data-rs="nav-links" style="display:flex;gap:26px;font:600 15px 'Montserrat';color:#3a3a34">
-        <a href="#flavors" style="color:#3a3a34;text-decoration:none">Корми</a>
-        <a href="#benefits" style="color:#3a3a34;text-decoration:none">Користь</a>
-        <a href="#reviews" style="color:#3a3a34;text-decoration:none">Відгуки</a>
-        <a href="#order" style="color:#3a3a34;text-decoration:none">Доставка</a>
+    <div class="header__actions">
+      <nav class="header__nav">
+        <a class="header__link" href="#flavors">Корми</a>
+        <a class="header__link" href="#benefits">Користь</a>
+        <a class="header__link" href="#reviews">Відгуки</a>
+        <a class="header__link" href="#order">Доставка</a>
       </nav>
-      <a href="tel:+380770775700" style="font:800 16px 'Montserrat';color:#15140f;text-decoration:none;white-space:nowrap">+38 (077) 077 57 00</a>
+      <a class="header__phone" href="tel:+380770775700">+38 (077) 077 57 00</a>
     </div>
   </div>
 </header>
 
 <!-- ============ 1. HERO ============ -->
-<section style="background:#f6f5f0">
-  <div data-rs="stack stack-gap pad-hero" style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:54px 40px 64px">
+<section class="hero">
+  <div class="hero__grid">
     <div>
-      <div style="display:flex;align-items:center;gap:12px">
-        <span style="color:#f5b301;font-size:19px;letter-spacing:2px">★★★★★</span>
-        <span style="font:800 16px 'Montserrat';color:#15140f">4,99/5</span>
-        <span style="font:600 15px 'Montserrat';color:#8a8d86">· 143 відгуки реальних клієнтів</span>
+      <div class="hero__rating">
+        <span class="hero__stars">★★★★★</span>
+        <span class="hero__score">4,99/5</span>
+        <span class="hero__rating-meta">· 143 відгуки реальних клієнтів</span>
       </div>
-      <h1 data-rs="fs-54" style="font:800 54px/1.05 'Montserrat';color:#15140f;margin:18px 0 0;letter-spacing:-.015em">Блискуча шерсть і <span style="color:#7aa516">здоровий шлунок</span> починаються з&nbsp;миски</h1>
-      <p style="font:500 18px/1.55 'Montserrat';color:#5c5f58;margin:18px 0 0;max-width:490px"><b style="color:#15140f">Дегустаційний сет: 3 смаки суперпреміум-корму по 300&nbsp;г</b> + 2 печива у подарунок.</p>
-      <div style="display:flex;align-items:center;gap:18px;margin:26px 0">
-        <span data-rs="fs-58" style="font:900 58px 'Montserrat';color:#15140f;line-height:.9;letter-spacing:-.02em">495 <span style="font-size:30px">грн</span></span>
-        <span style="font:800 22px 'Montserrat';color:#b3b3ac;text-decoration:line-through">550 грн</span>
-        <span style="background:#ec7d2a;color:#fff;font:800 14px 'Montserrat';padding:6px 12px;border-radius:8px">−10%</span>
+      <h1 class="hero__title">Блискуча шерсть і <span class="text-accent">здоровий шлунок</span> починаються з&nbsp;миски</h1>
+      <p class="hero__lede"><b class="text-ink">Дегустаційний сет: 3 смаки суперпреміум-корму по 300&nbsp;г</b> + 2 печива у подарунок.</p>
+      <div class="hero__price-row">
+        <span class="hero__price">495 <span class="hero__price-unit">грн</span></span>
+        <span class="hero__price-old">550 грн</span>
+        <span class="hero__discount">−10%</span>
       </div>
-      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
-        <a href="#order" style="display:inline-flex;align-items:center;gap:16px;background:#15140f;color:#fff;text-decoration:none;font:800 17px 'Montserrat';padding:8px 8px 8px 28px;border-radius:99px">Замовити набір<span style="width:46px;height:46px;border-radius:50%;background:#a3ce2e;display:flex;align-items:center;justify-content:center;color:#15140f;font-size:20px">↗</span></a>
-        <div style="font:700 14px/1.4 'Montserrat';color:#5c5f58">✓ Відправка Пн–Сб до 16:00<br>✓ Оплата при отриманні</div>
+      <div class="hero__actions">
+        <a class="hero__cta" href="#order">Замовити набір<span class="hero__cta-icon">↗</span></a>
+        <div class="hero__note">✓ Відправка Пн–Сб до 16:00<br>✓ Оплата при отриманні</div>
       </div>
     </div>
-    <div style="position:relative">
-      <div style="position:absolute;inset:-6% -4%;background:radial-gradient(60% 55% at 55% 45%,rgba(163,206,46,.22),rgba(163,206,46,0) 70%);border-radius:50%"></div>
-      <img src="images/set.webp" alt="Сет Pure Nutrition: яловичина, індичка, лосось" style="position:relative;width:100%;display:block;border-radius:18px">
-      <div data-rs="hero-badge" style="position: absolute; top: 201px; left: -8px; background: #fff; border-radius: 99px; padding: 9px 16px; font: 800 13px 'Montserrat'; color: #15140f; box-shadow: 0 8px 20px rgba(0,0,0,.12); transform: rotate(-5deg); white-space: nowrap">🥩 Яловичина · 48% м'яса</div>
-      <div data-rs="hero-badge" style="position: absolute; top: 132px; left: 231px; transform: translateX(-50%) rotate(-2deg); background: #fff; border-radius: 99px; padding: 9px 16px; font: 800 13px 'Montserrat'; color: #15140f; box-shadow: 0 8px 20px rgba(0,0,0,.12); white-space: nowrap">🦃 Індичка · 47% м'яса</div>
-      <div data-rs="hero-badge" style="position: absolute; top: 178px; background: #fff; border-radius: 99px; padding: 9px 16px; font: 800 13px 'Montserrat'; color: #15140f; box-shadow: 0 8px 20px rgba(0,0,0,.12); transform: rotate(4deg); white-space: nowrap; left: 296px">🐟 Лосось · 54% м'яса</div>
-      <div style="position:absolute;bottom:13%;right:4%;background:#a3ce2e;border-radius:99px;padding:9px 16px;font:800 13px 'Montserrat';color:#15140f;box-shadow:0 8px 20px rgba(0,0,0,.12);transform:rotate(-3deg);white-space:nowrap">🎁 +2 печива в подарунок</div>
+    <div class="hero__media">
+      <div class="hero__glow"></div>
+      <img class="hero__image" src="images/set.webp" alt="Сет Pure Nutrition: яловичина, індичка, лосось">
+      <div class="hero__badge hero__badge--beef">🥩 Яловичина · 48% м'яса</div>
+      <div class="hero__badge hero__badge--turkey">🦃 Індичка · 47% м'яса</div>
+      <div class="hero__badge hero__badge--salmon">🐟 Лосось · 54% м'яса</div>
+      <div class="hero__gift">🎁 +2 печива в подарунок</div>
     </div>
   </div>
 
   <!-- feature strip -->
-  <div data-rs="grid-4 pad-side" style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:0 40px 56px">
-    <div style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #ebeae3;border-radius:16px;padding:18px 20px;box-shadow:0 4px 16px rgba(21,20,15,.04)">
-      <img src="images/icon-hipo.svg" alt="" width="44" height="44" style="flex:none">
-      <div style="font:500 15px/1.3 'Montserrat';color:#15140f">Повнораціонний гіпоалергенний склад</div>
+  <div class="feature-strip">
+    <div class="feature-card">
+      <img class="feature-card__icon" src="images/icon-hipo.svg" alt="" width="44" height="44">
+      <div class="feature-card__text">Повнораціонний гіпоалергенний склад</div>
     </div>
-    <div style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #ebeae3;border-radius:16px;padding:18px 20px;box-shadow:0 4px 16px rgba(21,20,15,.04)">
-      <img src="images/icon-stomach.svg" alt="" width="44" height="44" style="flex:none">
-      <div style="font:500 15px/1.3 'Montserrat';color:#15140f">Підходить для чутливих шлуночків</div>
+    <div class="feature-card">
+      <img class="feature-card__icon" src="images/icon-stomach.svg" alt="" width="44" height="44">
+      <div class="feature-card__text">Підходить для чутливих шлуночків</div>
     </div>
-    <div style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #ebeae3;border-radius:16px;padding:18px 20px;box-shadow:0 4px 16px rgba(21,20,15,.04)">
-      <img src="images/icon-meat.svg" alt="" width="46" height="46" style="flex:none">
-      <div style="font:500 15px/1.3 'Montserrat';color:#15140f">~50% м'яса міститься у складі</div>
+    <div class="feature-card">
+      <img class="feature-card__icon" src="images/icon-meat.svg" alt="" width="46" height="46">
+      <div class="feature-card__text">~50% м'яса міститься у складі</div>
     </div>
-    <div style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #ebeae3;border-radius:16px;padding:18px 20px;box-shadow:0 4px 16px rgba(21,20,15,.04)">
-      <img src="images/icon-vitamin.svg" alt="" width="48" height="44" style="flex:none">
-      <div style="font:500 15px/1.3 'Montserrat';color:#15140f">Вітамінізований та поживний</div>
+    <div class="feature-card">
+      <img class="feature-card__icon" src="images/icon-vitamin.svg" alt="" width="48" height="44">
+      <div class="feature-card__text">Вітамінізований та поживний</div>
     </div>
   </div>
 </section>
 
 <!-- ============ 2. FLAVORS / COMPOSITION ============ -->
-<section id="flavors" style="background:#fff;border-top:1px solid #ebeae3;padding:76px 0">
-  <div data-rs="pad-side" style="max-width:1200px;margin:0 auto;padding:0 40px">
-    <h2 data-rs="fs-40-800" style="font:800 40px/1.1 'Montserrat';letter-spacing:-.01em;margin:0;max-width:900px">Повнораціонний суперпреміум, де кожен інгредієнт має сенс</h2>
-    <p style="font:500 18px/1.55 'Montserrat';color:#5c5f58;max-width:760px;margin:14px 0 0">У наборі — три види корму по 300&nbsp;г. Окремі рецептури для малих порід і для собак середніх та великих порід — з оптимальним розміром гранули.</p>
+<section class="section section--white section--bordered" id="flavors">
+  <div class="container">
+    <h2 class="section-title flavors__title">Повнораціонний суперпреміум, де кожен інгредієнт має сенс</h2>
+    <p class="section-lede">У наборі — три види корму по 300&nbsp;г. Окремі рецептури для малих порід і для собак середніх та великих порід — з оптимальним розміром гранули.</p>
 
     <!-- breed switcher -->
-    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:28px">
-      <span style="font:800 14px 'Montserrat';color:#15140f">Склад:</span>
-      <div style="display:inline-flex;background:#f6f5f0;border:1px solid #ebeae3;border-radius:99px;padding:5px">
-        <button type="button" data-js="breed-small" data-rs="seg-btn" style="border:0;font:800 15px 'Montserrat';color:#15140f;padding:11px 22px;border-radius:99px;cursor:pointer;background:#a3ce2e;transition:.15s">🐩 Для малих порід</button>
-        <button type="button" data-js="breed-large" data-rs="seg-btn" style="border:0;background:transparent;font:800 15px 'Montserrat';color:#8a8d86;padding:11px 22px;border-radius:99px;cursor:pointer;transition:.15s">🐕 Для середніх і великих</button>
+    <div class="breed">
+      <span class="breed__label">Склад:</span>
+      <div class="seg-group">
+        <button type="button" class="seg is-active" data-js="breed-small">🐩 Для малих порід</button>
+        <button type="button" class="seg" data-js="breed-large">🐕 Для середніх і великих</button>
       </div>
-      <span data-js="granule" style="font:600 14px 'Montserrat';color:#8a8d86"></span>
+      <span class="breed__granule" data-js="granule"></span>
     </div>
 
-    <div data-rs="stack" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:26px">
+    <div class="flavor-grid">
       <!-- beef -->
-      <div style="background:#faf9f5;border:1px solid #ebeae3;border-radius:18px;padding:18px;box-shadow:0 4px 16px rgba(21,20,15,.04)">
-        <img data-js="pack-beef" src="images/pack-beef.jpg" alt="Pure Nutrition — Соковита яловичина, 300 г" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;display:block">
-        <h3 style="font:800 20px 'Montserrat';letter-spacing:-.01em;margin:16px 0 0">🥩 Соковита яловичина</h3>
-        <div style="display:flex;align-items:center;gap:8px;margin:8px 0 12px;font:600 13px 'Montserrat';color:#8a8d86"><span style="color:#f5b301;letter-spacing:1px">★★★★★</span> 5.00/5</div>
-        <span data-js="meat-beef" style="display:inline-block;background:#7c5cbf;color:#fff;font:800 13px 'Montserrat';padding:5px 12px;border-radius:8px"></span>
-        <p style="font:500 14px/1.5 'Montserrat';color:#5c5f58;margin:12px 0 0">Амарант, льон, ягоди — антиоксиданти для енергії та імунітету.</p>
-        <button type="button" data-js="open-composition" data-flavor="beef" style="margin-top:16px;background:none;border:1px solid #d8d7cf;color:#3a3a34;font:700 13px 'Montserrat';cursor:pointer;padding:8px 15px;border-radius:99px">Дивитись повний склад</button>
+      <div class="flavor-card">
+        <img class="flavor-card__image" data-js="pack-beef" src="images/pack-beef.jpg" alt="Pure Nutrition — Соковита яловичина, 300 г">
+        <h3 class="flavor-card__title">🥩 Соковита яловичина</h3>
+        <div class="flavor-card__rating"><span class="flavor-card__stars">★★★★★</span> 5.00/5</div>
+        <span class="flavor-card__meat flavor-card__meat--beef" data-js="meat-beef"></span>
+        <p class="flavor-card__text">Амарант, льон, ягоди — антиоксиданти для енергії та імунітету.</p>
+        <button type="button" class="flavor-card__more" data-js="open-composition" data-flavor="beef">Дивитись повний склад</button>
       </div>
       <!-- turkey -->
-      <div style="background:#faf9f5;border:1px solid #ebeae3;border-radius:18px;padding:18px;box-shadow:0 4px 16px rgba(21,20,15,.04)">
-        <img data-js="pack-turkey" src="images/pack-turkey.jpg" alt="Pure Nutrition — Ніжна індичка, 300 г" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;display:block">
-        <h3 style="font:800 20px 'Montserrat';letter-spacing:-.01em;margin:16px 0 0">🦃 Ніжна індичка</h3>
-        <div style="display:flex;align-items:center;gap:8px;margin:8px 0 12px;font:600 13px 'Montserrat';color:#8a8d86"><span style="color:#f5b301;letter-spacing:1px">★★★★★</span> 5.00/5</div>
-        <span data-js="meat-turkey" style="display:inline-block;background:#e8a13c;color:#fff;font:800 13px 'Montserrat';padding:5px 12px;border-radius:8px"></span>
-        <p style="font:500 14px/1.5 'Montserrat';color:#5c5f58;margin:12px 0 0">Легкозасвоюваний білок, низький жир. Печінка, лосось, овочі.</p>
-        <button type="button" data-js="open-composition" data-flavor="turkey" style="margin-top:16px;background:none;border:1px solid #d8d7cf;color:#3a3a34;font:700 13px 'Montserrat';cursor:pointer;padding:8px 15px;border-radius:99px">Дивитись повний склад</button>
+      <div class="flavor-card">
+        <img class="flavor-card__image" data-js="pack-turkey" src="images/pack-turkey.jpg" alt="Pure Nutrition — Ніжна індичка, 300 г">
+        <h3 class="flavor-card__title">🦃 Ніжна індичка</h3>
+        <div class="flavor-card__rating"><span class="flavor-card__stars">★★★★★</span> 5.00/5</div>
+        <span class="flavor-card__meat flavor-card__meat--turkey" data-js="meat-turkey"></span>
+        <p class="flavor-card__text">Легкозасвоюваний білок, низький жир. Печінка, лосось, овочі.</p>
+        <button type="button" class="flavor-card__more" data-js="open-composition" data-flavor="turkey">Дивитись повний склад</button>
       </div>
       <!-- salmon -->
-      <div style="background:#faf9f5;border:1px solid #ebeae3;border-radius:18px;padding:18px;box-shadow:0 4px 16px rgba(21,20,15,.04)">
-        <img data-js="pack-salmon" src="images/pack-salmon.jpg" alt="Pure Nutrition — Делікатний лосось, 300 г" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;display:block">
-        <h3 style="font:800 20px 'Montserrat';letter-spacing:-.01em;margin:16px 0 0">🐟 Делікатний лосось</h3>
-        <div style="display:flex;align-items:center;gap:8px;margin:8px 0 12px;font:600 13px 'Montserrat';color:#8a8d86"><span style="color:#f5b301;letter-spacing:1px">★★★★★</span> 5.00/5</div>
-        <span data-js="meat-salmon" style="display:inline-block;background:#3f8fd0;color:#fff;font:800 13px 'Montserrat';padding:5px 12px;border-radius:8px"></span>
-        <p style="font:500 14px/1.5 'Montserrat';color:#5c5f58;margin:12px 0 0">Безглютеновий, на рисі. Омега-3 для серця, суглобів і шкіри.</p>
-        <button type="button" data-js="open-composition" data-flavor="salmon" style="margin-top:16px;background:none;border:1px solid #d8d7cf;color:#3a3a34;font:700 13px 'Montserrat';cursor:pointer;padding:8px 15px;border-radius:99px">Дивитись повний склад</button>
+      <div class="flavor-card">
+        <img class="flavor-card__image" data-js="pack-salmon" src="images/pack-salmon.jpg" alt="Pure Nutrition — Делікатний лосось, 300 г">
+        <h3 class="flavor-card__title">🐟 Делікатний лосось</h3>
+        <div class="flavor-card__rating"><span class="flavor-card__stars">★★★★★</span> 5.00/5</div>
+        <span class="flavor-card__meat flavor-card__meat--salmon" data-js="meat-salmon"></span>
+        <p class="flavor-card__text">Безглютеновий, на рисі. Омега-3 для серця, суглобів і шкіри.</p>
+        <button type="button" class="flavor-card__more" data-js="open-composition" data-flavor="salmon">Дивитись повний склад</button>
       </div>
     </div>
 
@@ -202,29 +134,29 @@
 </section>
 
 <!-- ============ 2b. DAILY CARE — EDITORIAL LIST ============ -->
-<section style="background:#fff;border-top:1px solid #ebeae3;padding:84px 0;overflow:hidden">
-  <div data-rs="stack stack-gap pad-side" style="max-width:1200px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:0.86fr 1.14fr;gap:64px;align-items:start">
+<section class="care">
+  <div class="container care__grid">
 
     <!-- LEFT sticky heading -->
-    <div data-rs="unstick" style="position:sticky;top:96px">
-      <div style="font:700 13px 'Montserrat';letter-spacing:.04em;color:#a3a39a">[ чому це важливо ]</div>
-      <h2 data-rs="fs-42" style="font:800 42px/1.1 'Montserrat';letter-spacing:-.015em;margin:18px 0 0">Кожна порція — ваша щоденна
-        <span style="position:relative;display:inline-block;white-space:nowrap">турбота
-          <svg viewBox="0 0 220 80" preserveAspectRatio="none" style="position:absolute;left:-8%;top:-16%;width:116%;height:140%;overflow:visible;z-index:-1"><path d="M22 44 C 18 18, 78 8, 128 11 C 184 14, 200 30, 194 48 C 188 68, 120 76, 68 71 C 26 67, 12 56, 24 38" fill="none" stroke="#a3ce2e" stroke-width="3.4" stroke-linecap="round"></path></svg>
+    <div class="care__aside">
+      <div class="care__eyebrow">[ чому це важливо ]</div>
+      <h2 class="care__title">Кожна порція — ваша щоденна
+        <span class="care__highlight">турбота
+          <svg class="care__scribble" viewBox="0 0 220 80" preserveAspectRatio="none"><path d="M22 44 C 18 18, 78 8, 128 11 C 184 14, 200 30, 194 48 C 188 68, 120 76, 68 71 C 26 67, 12 56, 24 38" fill="none" stroke="#a3ce2e" stroke-width="3.4" stroke-linecap="round"></path></svg>
         </span>
         про здоров'я песика</h2>
 
       <!-- animated bowl: raw ingredients ⇄ kibble -->
-      <div style="margin:34px 0 0;max-width:340px">
-        <div style="position:relative;width:100%;aspect-ratio:1/1">
-          <div style="position:absolute;inset:6%;border-radius:50%;background:radial-gradient(circle at 50% 42%,rgba(163,206,46,.18),rgba(163,206,46,0) 62%)"></div>
-          <div style="position:absolute;inset:0;border:2px dashed rgba(163,206,46,.55);border-radius:50%;animation:pn-bowl-ring 6s ease-in-out infinite"></div>
-          <img src="images/bowl-kibble-sm.png" alt="Готовий корм у мисці" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;animation:pn-bowl-kibble 6s ease-in-out infinite;will-change:opacity,transform">
-          <img src="images/bowl-raw-sm.png" alt="Сирі інгредієнти у мисці" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;animation:pn-bowl-raw 6s ease-in-out infinite;will-change:opacity,transform">
+      <div class="bowl">
+        <div class="bowl__stage">
+          <div class="bowl__glow"></div>
+          <div class="bowl__ring"></div>
+          <img class="bowl__img bowl__img--kibble" src="images/bowl-kibble-sm.png" alt="Готовий корм у мисці">
+          <img class="bowl__img bowl__img--raw" src="images/bowl-raw-sm.png" alt="Сирі інгредієнти у мисці">
         </div>
-        <div style="position:relative;height:22px;margin-top:8px;text-align:center">
-          <span style="position:absolute;inset:0;font:700 13px 'Montserrat';letter-spacing:.03em;color:#7aa516;animation:pn-label-a 6s ease-in-out infinite">Натуральні інгредієнти</span>
-          <span style="position:absolute;inset:0;font:700 13px 'Montserrat';letter-spacing:.03em;color:#7aa516;animation:pn-label-b 6s ease-in-out infinite">Стають готовим кормом</span>
+        <div class="bowl__labels">
+          <span class="bowl__label bowl__label--a">Натуральні інгредієнти</span>
+          <span class="bowl__label bowl__label--b">Стають готовим кормом</span>
         </div>
       </div>
     </div>
@@ -232,56 +164,56 @@
     <!-- RIGHT list -->
     <div>
       <!-- 01 -->
-      <div style="display:grid;grid-template-columns:64px 1fr;gap:22px;padding:0 0 26px">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7aa516" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="margin-top:4px"><path d="M13 2 L4 14 h7 l-1 8 9-12 h-7 z"></path></svg>
+      <div class="care-item care-item--first">
+        <svg class="care-item__icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7aa516" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 L4 14 h7 l-1 8 9-12 h-7 z"></path></svg>
         <div>
-          <h3 style="font:800 22px/1.2 'Montserrat';letter-spacing:-.01em;margin:0 0 8px">Більше сил для прогулянок та ігор</h3>
-          <p style="font:500 16px/1.6 'Montserrat';color:#5c5f58;margin:0">62,5% м'ясних інгредієнтів і безглютенові зернові забезпечують білком та енергією для щоденної активності.</p>
+          <h3 class="care-item__title">Більше сил для прогулянок та ігор</h3>
+          <p class="care-item__text">62,5% м'ясних інгредієнтів і безглютенові зернові забезпечують білком та енергією для щоденної активності.</p>
         </div>
       </div>
-      <div style="height:1px;background:#ebeae3"></div>
+      <div class="care__divider"></div>
       <!-- 02 -->
-      <div style="display:grid;grid-template-columns:64px 1fr;gap:22px;padding:26px 0">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3f9d52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="margin-top:4px"><path d="M11 20 A7 7 0 0 1 18 13 c2 0 3-1 3-3 -3 0-6 1-7.5 3.2"></path><path d="M11 20 C 11 12, 7 7, 3 6 c 0 5, 3 11, 8 14"></path></svg>
+      <div class="care-item">
+        <svg class="care-item__icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3f9d52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20 A7 7 0 0 1 18 13 c2 0 3-1 3-3 -3 0-6 1-7.5 3.2"></path><path d="M11 20 C 11 12, 7 7, 3 6 c 0 5, 3 11, 8 14"></path></svg>
         <div>
-          <h3 style="font:800 22px/1.2 'Montserrat';letter-spacing:-.01em;margin:0 0 8px">Комфортне травлення</h3>
-          <p style="font:500 16px/1.6 'Montserrat';color:#5c5f58;margin:0">Про- і пребіотики, псиліум та ромашка підтримують мікрофлору й нормальну роботу кишківника.</p>
+          <h3 class="care-item__title">Комфортне травлення</h3>
+          <p class="care-item__text">Про- і пребіотики, псиліум та ромашка підтримують мікрофлору й нормальну роботу кишківника.</p>
         </div>
       </div>
-      <div style="height:1px;background:#ebeae3"></div>
+      <div class="care__divider"></div>
       <!-- 03 -->
-      <div style="display:grid;grid-template-columns:64px 1fr;gap:22px;padding:26px 0">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3f8fd0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="margin-top:4px"><path d="M12 3 C 12 3, 5 11, 5 16 a7 7 0 0 0 14 0 C 19 11, 12 3, 12 3 z"></path><path d="M9 16 a3 3 0 0 0 3 3"></path></svg>
+      <div class="care-item">
+        <svg class="care-item__icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3f8fd0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 C 12 3, 5 11, 5 16 a7 7 0 0 0 14 0 C 19 11, 12 3, 12 3 z"></path><path d="M9 16 a3 3 0 0 0 3 3"></path></svg>
         <div>
-          <h3 style="font:800 22px/1.2 'Montserrat';letter-spacing:-.01em;margin:0 0 8px">Здорова шкіра та блискуча шерсть</h3>
-          <p style="font:500 16px/1.6 'Montserrat';color:#5c5f58;margin:0">Омега-3 й Омега-6 з олії лосося та льону живлять шкіру і допомагають зберігати шерсть доглянутою.</p>
+          <h3 class="care-item__title">Здорова шкіра та блискуча шерсть</h3>
+          <p class="care-item__text">Омега-3 й Омега-6 з олії лосося та льону живлять шкіру і допомагають зберігати шерсть доглянутою.</p>
         </div>
       </div>
-      <div style="height:1px;background:#ebeae3"></div>
+      <div class="care__divider"></div>
       <!-- 04 -->
-      <div style="display:grid;grid-template-columns:64px 1fr;gap:22px;padding:26px 0">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ec7d2a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="margin-top:4px"><path d="M8 8 a2.4 2.4 0 1 0-2-3.6 A2.4 2.4 0 1 0 4.4 8.6 l9 9 a2.4 2.4 0 1 0 3.6 2 2.4 2.4 0 1 0 2-3.6 z"></path></svg>
+      <div class="care-item">
+        <svg class="care-item__icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ec7d2a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8 a2.4 2.4 0 1 0-2-3.6 A2.4 2.4 0 1 0 4.4 8.6 l9 9 a2.4 2.4 0 1 0 3.6 2 2.4 2.4 0 1 0 2-3.6 z"></path></svg>
         <div>
-          <h3 style="font:800 22px/1.2 'Montserrat';letter-spacing:-.01em;margin:0 0 8px">Міцні кістки та сильні м'язи</h3>
-          <p style="font:500 16px/1.6 'Montserrat';color:#5c5f58;margin:0">Кальцій, фосфор, вітамін D3 і протеїн підтримують опорно-рухову систему собаки.</p>
+          <h3 class="care-item__title">Міцні кістки та сильні м'язи</h3>
+          <p class="care-item__text">Кальцій, фосфор, вітамін D3 і протеїн підтримують опорно-рухову систему собаки.</p>
         </div>
       </div>
-      <div style="height:1px;background:#ebeae3"></div>
+      <div class="care__divider"></div>
       <!-- 05 -->
-      <div style="display:grid;grid-template-columns:64px 1fr;gap:22px;padding:26px 0">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7c5cbf" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="margin-top:4px"><path d="M12 3 l7 3 v5 c0 4.5-3 7.5-7 9 -4-1.5-7-4.5-7-9 V6 z"></path><path d="M9 12 l2 2 3.5-4"></path></svg>
+      <div class="care-item">
+        <svg class="care-item__icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7c5cbf" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 l7 3 v5 c0 4.5-3 7.5-7 9 -4-1.5-7-4.5-7-9 V6 z"></path><path d="M9 12 l2 2 3.5-4"></path></svg>
         <div>
-          <h3 style="font:800 22px/1.2 'Montserrat';letter-spacing:-.01em;margin:0 0 8px">Гіпоалергенна рецептура без курки та глютену</h3>
-          <p style="font:500 16px/1.6 'Montserrat';color:#5c5f58;margin:0">Рецептура без курячого білка та глютену знижує ризик небажаних харчових реакцій і краще підходить собакам із чутливим травленням.</p>
+          <h3 class="care-item__title">Гіпоалергенна рецептура без курки та глютену</h3>
+          <p class="care-item__text">Рецептура без курячого білка та глютену знижує ризик небажаних харчових реакцій і краще підходить собакам із чутливим травленням.</p>
         </div>
       </div>
-      <div style="height:1px;background:#ebeae3"></div>
+      <div class="care__divider"></div>
       <!-- 06 -->
-      <div style="display:grid;grid-template-columns:64px 1fr;gap:22px;padding:26px 0 0">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d8597a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="margin-top:4px"><path d="M20.5 8.6 a4.7 4.7 0 0 0-8.5-2.6 4.7 4.7 0 0 0-8.5 2.6 c0 1.6 1 3 2.4 4.4"></path><path d="M3 13 h4 l1.5-3 2.5 6 2-4 1.5 2 H21"></path></svg>
+      <div class="care-item care-item--last">
+        <svg class="care-item__icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d8597a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 8.6 a4.7 4.7 0 0 0-8.5-2.6 4.7 4.7 0 0 0-8.5 2.6 c0 1.6 1 3 2.4 4.4"></path><path d="M3 13 h4 l1.5-3 2.5 6 2-4 1.5 2 H21"></path></svg>
         <div>
-          <h3 style="font:800 22px/1.2 'Montserrat';letter-spacing:-.01em;margin:0 0 8px">Щоденна підтримка імунітету</h3>
-          <p style="font:500 16px/1.6 'Montserrat';color:#5c5f58;margin:0">Вітаміни A, C та E, цинк і селен підтримують природний захист організму.</p>
+          <h3 class="care-item__title">Щоденна підтримка імунітету</h3>
+          <p class="care-item__text">Вітаміни A, C та E, цинк і селен підтримують природний захист організму.</p>
         </div>
       </div>
     </div>
@@ -289,26 +221,26 @@
 </section>
 
 <!-- ============ 4. PROBLEM / SOLUTION ============ -->
-<section style="background:#fff;border-top:1px solid #ebeae3;padding:76px 0">
-  <div data-rs="pad-side" style="max-width:1200px;margin:0 auto;padding:0 40px">
-    <h2 data-rs="fs-40-800" style="font:800 40px/1.1 'Montserrat';letter-spacing:-.01em;margin:0">Знайома ситуація?</h2>
-    <div data-rs="stack" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:26px">
-      <div style="background:#fbeef0;border:1px solid #f3d7dd;border-radius:18px;padding:30px">
-        <h3 style="font:800 22px 'Montserrat';margin:0 0 14px">😔 Зі звичайним кормом</h3>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="display:flex;gap:12px;font:500 15px/1.45 'Montserrat';color:#5c5f58"><span style="color:#c0506a;font-weight:800">✕</span>Собака вибагливо їсть або зовсім відмовляється</div>
-          <div style="display:flex;gap:12px;font:500 15px/1.45 'Montserrat';color:#5c5f58"><span style="color:#c0506a;font-weight:800">✕</span>Сльозові доріжки, свербіж, тьмяна шерсть</div>
-          <div style="display:flex;gap:12px;font:500 15px/1.45 'Montserrat';color:#5c5f58"><span style="color:#c0506a;font-weight:800">✕</span>Розлади шлунку після зміни корму</div>
-          <div style="display:flex;gap:12px;font:500 15px/1.45 'Montserrat';color:#5c5f58"><span style="color:#c0506a;font-weight:800">✕</span>Купили велику пачку — а смак «не зайшов»</div>
+<section class="section section--white section--bordered">
+  <div class="container">
+    <h2 class="section-title">Знайома ситуація?</h2>
+    <div class="compare">
+      <div class="compare__card compare__card--bad">
+        <h3 class="compare__title">😔 Зі звичайним кормом</h3>
+        <div class="compare__list">
+          <div class="compare__item"><span class="compare__mark compare__mark--bad">✕</span>Собака вибагливо їсть або зовсім відмовляється</div>
+          <div class="compare__item"><span class="compare__mark compare__mark--bad">✕</span>Сльозові доріжки, свербіж, тьмяна шерсть</div>
+          <div class="compare__item"><span class="compare__mark compare__mark--bad">✕</span>Розлади шлунку після зміни корму</div>
+          <div class="compare__item"><span class="compare__mark compare__mark--bad">✕</span>Купили велику пачку — а смак «не зайшов»</div>
         </div>
       </div>
-      <div style="background:#f1f7e3;border:1px solid #dcebbf;border-radius:18px;padding:30px">
-        <h3 style="font:800 22px 'Montserrat';margin:0 0 14px">😊 З дегустаційним сетом Pure Nutrition</h3>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="display:flex;gap:12px;font:500 15px/1.45 'Montserrat';color:#42513a"><span style="color:#7aa516;font-weight:800">✓</span>Три смаки — собака обирає, від чого не відвернеться</div>
-          <div style="display:flex;gap:12px;font:500 15px/1.45 'Montserrat';color:#42513a"><span style="color:#7aa516;font-weight:800">✓</span>Без курки та глютену — менше свербежу, чистіші очі, блискучіша шерсть</div>
-          <div style="display:flex;gap:12px;font:500 15px/1.45 'Montserrat';color:#42513a"><span style="color:#7aa516;font-weight:800">✓</span>Про- і пребіотики — м'який перехід без розладів шлунку</div>
-          <div style="display:flex;gap:12px;font:500 15px/1.45 'Montserrat';color:#42513a"><span style="color:#7aa516;font-weight:800">✓</span>Міні-формат: ризикуєте 495 грн, а не ціною великої пачки</div>
+      <div class="compare__card compare__card--good">
+        <h3 class="compare__title">😊 З дегустаційним сетом Pure Nutrition</h3>
+        <div class="compare__list">
+          <div class="compare__item compare__item--good"><span class="compare__mark compare__mark--good">✓</span>Три смаки — собака обирає, від чого не відвернеться</div>
+          <div class="compare__item compare__item--good"><span class="compare__mark compare__mark--good">✓</span>Без курки та глютену — менше свербежу, чистіші очі, блискучіша шерсть</div>
+          <div class="compare__item compare__item--good"><span class="compare__mark compare__mark--good">✓</span>Про- і пребіотики — м'який перехід без розладів шлунку</div>
+          <div class="compare__item compare__item--good"><span class="compare__mark compare__mark--good">✓</span>Міні-формат: ризикуєте 495 грн, а не ціною великої пачки</div>
         </div>
       </div>
     </div>
@@ -316,26 +248,26 @@
 </section>
 
 <!-- ============ 6. BONUS + TRANSITION ============ -->
-<section style="background:#fff;border-top:1px solid #ebeae3;padding:76px 0">
-  <div data-rs="pad-side" style="max-width:1200px;margin:0 auto;padding:0 40px">
-    <h2 data-rs="fs-40-800" style="font:800 40px/1.1 'Montserrat';letter-spacing:-.01em;margin:0;max-width:760px">Собака крутить носом? Найчастіше річ <span style="color:#7aa516">не в кормі</span></h2>
-    <p style="font:500 18px/1.55 'Montserrat';color:#5c5f58;margin:16px 0 0;max-width:660px">У більшості здорових собак відмова від їжі пов'язана не з самим кормом, а зі сформованими харчовими звичками: часті ласощі, підгодовування зі столу та відсутність режиму. Саме це, а не миска, найчастіше збиває апетит — і це можна налагодити.</p>
-    <div data-rs="pad-bonus bleed" style="position:relative;overflow:hidden;background:#f2f6e4;border:1px solid #e2ecc4;border-radius:28px;padding:46px 48px;color:#15140f;margin:36px -40px 0">
-      <div style="position:absolute;top:-140px;right:-110px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(163,206,46,.32),rgba(163,206,46,0) 68%)"></div>
-      <div data-rs="stack" style="position:relative;display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center">
+<section class="section section--white section--bordered">
+  <div class="container">
+    <h2 class="section-title bonus__title">Собака крутить носом? Найчастіше річ <span class="text-accent">не в кормі</span></h2>
+    <p class="section-lede bonus__lede">У більшості здорових собак відмова від їжі пов'язана не з самим кормом, а зі сформованими харчовими звичками: часті ласощі, підгодовування зі столу та відсутність режиму. Саме це, а не миска, найчастіше збиває апетит — і це можна налагодити.</p>
+    <div class="bonus">
+      <div class="bonus__glow"></div>
+      <div class="bonus__grid">
         <div>
-          <span style="display:inline-flex;align-items:center;gap:8px;background:#15140f;color:#a3ce2e;font:800 12px 'Montserrat';letter-spacing:.05em;text-transform:uppercase;padding:7px 14px;border-radius:99px">📩 Безкоштовно — на email</span>
-          <h3 data-rs="fs-34" style="font:800 34px/1.12 'Montserrat';letter-spacing:-.01em;color:#15140f;margin:18px 0 0;max-width:440px">Інструкція «Режим годування без вередувань»</h3>
-          <p style="font:500 15px/1.55 'Montserrat';color:#5c5f58;margin:14px 0 26px;max-width:430px">Надішлемо на вашу пошту одразу після оформлення замовлення — і ви відразу зможете почати.</p>
-          <a href="#order" style="display:inline-flex;align-items:center;gap:14px;background:#15140f;color:#fff;text-decoration:none;font:800 16px 'Montserrat';padding:8px 8px 8px 24px;border-radius:99px">Оформити замовлення<span style="width:42px;height:42px;border-radius:50%;background:#a3ce2e;display:flex;align-items:center;justify-content:center;color:#15140f;font-size:18px">↗</span></a>
+          <span class="bonus__pill">📩 Безкоштовно — на email</span>
+          <h3 class="bonus__heading">Інструкція «Режим годування без вередувань»</h3>
+          <p class="bonus__text">Надішлемо на вашу пошту одразу після оформлення замовлення — і ви відразу зможете почати.</p>
+          <a class="bonus__cta" href="#order">Оформити замовлення<span class="bonus__cta-icon">↗</span></a>
         </div>
-        <div style="background:#fff;border:1px solid #e2ecc4;border-radius:20px;padding:30px 32px">
-          <div style="font:800 12px 'Montserrat';letter-spacing:.08em;text-transform:uppercase;color:#7aa516;margin:0 0 18px">Що всередині</div>
-          <div style="display:flex;flex-direction:column;gap:13px">
-            <div style="display:flex;gap:12px;font:500 15px/1.42 'Montserrat';color:#3a3d36"><span style="color:#7aa516;font-weight:800;flex:none">✓</span>Графік годування під вагу та вік собаки</div>
-            <div style="display:flex;gap:12px;font:500 15px/1.42 'Montserrat';color:#3a3d36"><span style="color:#7aa516;font-weight:800;flex:none">✓</span>Як м'яко відучити від ласощів і столу</div>
-            <div style="display:flex;gap:12px;font:500 15px/1.42 'Montserrat';color:#3a3d36"><span style="color:#7aa516;font-weight:800;flex:none">✓</span>Що робити, якщо собака крутить носом</div>
-            <div style="display:flex;gap:12px;font:500 15px/1.42 'Montserrat';color:#3a3d36"><span style="color:#7aa516;font-weight:800;flex:none">✓</span>Розмір порції та скільки потрібно води</div>
+        <div class="bonus__card">
+          <div class="bonus__card-title">Що всередині</div>
+          <div class="bonus__list">
+            <div class="bonus__item"><span class="bonus__check">✓</span>Графік годування під вагу та вік собаки</div>
+            <div class="bonus__item"><span class="bonus__check">✓</span>Як м'яко відучити від ласощів і столу</div>
+            <div class="bonus__item"><span class="bonus__check">✓</span>Що робити, якщо собака крутить носом</div>
+            <div class="bonus__item"><span class="bonus__check">✓</span>Розмір порції та скільки потрібно води</div>
           </div>
         </div>
       </div>
@@ -344,166 +276,166 @@
 </section>
 
 <!-- ============ 7. TIMER (dark band) ============ -->
-<section data-rs="pad-side" style="background:#f6f5f0;padding:0 40px 76px">
-  <div data-rs="stack" style="max-width:1200px;margin:0 auto;background:#15140f;border-radius:28px;color:#fff;overflow:hidden;display:grid;grid-template-columns:1.1fr 0.9fr;align-items:stretch">
+<section class="band">
+  <div class="timer">
     <!-- LEFT: timer content -->
-    <div data-rs="pad-timer" style="position:relative;padding:54px 50px">
-      <div style="position:absolute;top:-130px;left:-90px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(163,206,46,.16),rgba(163,206,46,0) 68%)"></div>
-      <div style="position:relative">
-        <span data-js="ship-label" style="display:inline-block;background:rgba(255,255,255,.16);color:#fff;font:800 12px 'Montserrat';letter-spacing:.07em;text-transform:uppercase;padding:7px 14px;border-radius:99px"></span>
-        <h2 data-rs="fs-34" style="font:800 34px/1.12 'Montserrat';color:#fff;letter-spacing:-.01em;margin:18px 0 0;max-width:460px">Наступна відправка замовлень планується через:</h2>
-        <div style="display:flex;gap:12px;margin:26px 0 20px">
-          <div data-rs="timer-box" style="background:rgba(255,255,255,.12);border-radius:16px;min-width:90px;padding:14px 8px;text-align:center"><div data-js="timer-hours" data-rs="fs-40-900" style="font:900 40px 'Montserrat';line-height:1;letter-spacing:-.02em;color:#a3ce2e;font-variant-numeric:tabular-nums">00</div><div style="font:600 11px 'Montserrat';text-transform:uppercase;letter-spacing:.07em;opacity:.85;margin-top:4px">годин</div></div>
-          <div data-rs="timer-box" style="background:rgba(255,255,255,.12);border-radius:16px;min-width:90px;padding:14px 8px;text-align:center"><div data-js="timer-minutes" data-rs="fs-40-900" style="font:900 40px 'Montserrat';line-height:1;letter-spacing:-.02em;color:#a3ce2e;font-variant-numeric:tabular-nums">00</div><div style="font:600 11px 'Montserrat';text-transform:uppercase;letter-spacing:.07em;opacity:.85;margin-top:4px">хвилин</div></div>
-          <div data-rs="timer-box" style="background:rgba(255,255,255,.12);border-radius:16px;min-width:90px;padding:14px 8px;text-align:center"><div data-js="timer-seconds" data-rs="fs-40-900" style="font:900 40px 'Montserrat';line-height:1;letter-spacing:-.02em;color:#a3ce2e;font-variant-numeric:tabular-nums">00</div><div style="font:600 11px 'Montserrat';text-transform:uppercase;letter-spacing:.07em;opacity:.85;margin-top:4px">секунд</div></div>
+    <div class="timer__body">
+      <div class="timer__glow"></div>
+      <div class="timer__content">
+        <span class="timer__badge" data-js="ship-label"></span>
+        <h2 class="timer__title">Наступна відправка замовлень планується через:</h2>
+        <div class="timer__cells">
+          <div class="timer__cell"><div class="timer__value" data-js="timer-hours">00</div><div class="timer__unit">годин</div></div>
+          <div class="timer__cell"><div class="timer__value" data-js="timer-minutes">00</div><div class="timer__unit">хвилин</div></div>
+          <div class="timer__cell"><div class="timer__value" data-js="timer-seconds">00</div><div class="timer__unit">секунд</div></div>
         </div>
-        <p style="font:500 14px/1.5 'Montserrat';opacity:.85;margin:0 0 24px;max-width:380px">Нова Пошта • відправка Пн–Сб при замовленні до 16:00 (крім неділі)</p>
-        <a href="#order" style="display:inline-flex;align-items:center;gap:16px;background:#a3ce2e;color:#15140f;text-decoration:none;font:800 18px 'Montserrat';padding:9px 9px 9px 30px;border-radius:99px">Замовити зараз<span style="width:48px;height:48px;border-radius:50%;background:#15140f;display:flex;align-items:center;justify-content:center;color:#fff;font-size:21px">↗</span></a>
+        <p class="timer__note">Нова Пошта • відправка Пн–Сб при замовленні до 16:00 (крім неділі)</p>
+        <a class="timer__cta" href="#order">Замовити зараз<span class="timer__cta-icon">↗</span></a>
       </div>
     </div>
     <!-- RIGHT: shipped-box photo -->
-    <div style="position:relative;min-height:340px">
-      <img src="images/box-set2.jpg" alt="Коробка Pure Nutrition з дегустаційним сетом" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;display:block">
+    <div class="timer__media">
+      <img class="timer__image" src="images/box-set2.jpg" alt="Коробка Pure Nutrition з дегустаційним сетом">
     </div>
   </div>
 </section>
 
 <!-- ============ 8. REVIEWS ============ -->
-<section id="reviews" style="background:#fff;border-top:1px solid #ebeae3;padding:76px 0">
-  <div data-rs="pad-side" style="max-width:1200px;margin:0 auto;padding:0 40px">
-    <span style="display:inline-block;background:#a3ce2e;color:#15140f;font:800 12px 'Montserrat';letter-spacing:.07em;text-transform:uppercase;padding:7px 14px;border-radius:99px">Відгуки</span>
-    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:18px">
-      <span data-rs="fs-46" style="font:900 46px 'Montserrat';letter-spacing:-.02em;line-height:1">4,99/5</span>
-      <span style="color:#f5b301;font-size:24px;letter-spacing:2px">★★★★★</span>
-      <span style="font:500 18px 'Montserrat';color:#5c5f58">на основі 143 відгуків реальних клієнтів</span>
+<section class="section section--white section--bordered" id="reviews">
+  <div class="container">
+    <span class="pill">Відгуки</span>
+    <div class="reviews__score">
+      <span class="reviews__rating">4,99/5</span>
+      <span class="reviews__stars">★★★★★</span>
+      <span class="reviews__meta">на основі 143 відгуків реальних клієнтів</span>
     </div>
-    <p style="font:500 16px/1.5 'Montserrat';color:#8a8d86;margin:10px 0 0">Реальні скріншоти з листувань та публікацій наших клієнтів.</p>
-    <div id="revRail" style="position:relative;margin-top:30px">
-      <div id="revTrack" data-js="reviews-track" style="display:flex;align-items:center;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px 2px 14px;scrollbar-width:none">
-        <img src="images/reviews/r04.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r17.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r08.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r11.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r02.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r07.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r05.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r12.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r18.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r09.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r01.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r06.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r13.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r15.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r10.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r03.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
-        <img src="images/reviews/r16.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy" style="flex:none;max-height:360px;max-width:480px;width:auto;height:auto;display:block;border-radius:16px;border:1px solid #ebeae3;box-shadow:0 6px 20px rgba(21,20,15,.07);scroll-snap-align:start">
+    <p class="reviews__note">Реальні скріншоти з листувань та публікацій наших клієнтів.</p>
+    <div class="reviews__rail">
+      <div class="reviews__track" data-js="reviews-track">
+        <img class="reviews__slide" src="images/reviews/r04.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r17.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r08.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r11.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r02.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r07.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r05.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r12.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r18.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r09.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r01.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r06.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r13.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r15.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r10.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r03.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
+        <img class="reviews__slide" src="images/reviews/r16.jpg" alt="Відгук клієнта Pure Nutrition" loading="lazy">
       </div>
-      <button type="button" data-js="reviews-prev" data-rs="rail-arrow" aria-label="Попередній відгук" style="position:absolute;left:-20px;top:calc(50% - 26px);width:52px;height:52px;border-radius:50%;border:1px solid #ebeae3;background:#fff;box-shadow:0 6px 18px rgba(21,20,15,.14);cursor:pointer;font:600 24px 'Montserrat';color:#15140f;display:flex;align-items:center;justify-content:center;padding-bottom:3px">‹</button>
-      <button type="button" data-js="reviews-next" data-rs="rail-arrow" aria-label="Наступний відгук" style="position:absolute;right:-20px;top:calc(50% - 26px);width:52px;height:52px;border-radius:50%;border:1px solid #ebeae3;background:#fff;box-shadow:0 6px 18px rgba(21,20,15,.14);cursor:pointer;font:600 24px 'Montserrat';color:#15140f;display:flex;align-items:center;justify-content:center;padding-bottom:3px">›</button>
+      <button type="button" class="reviews__arrow reviews__arrow--prev" data-js="reviews-prev" aria-label="Попередній відгук">‹</button>
+      <button type="button" class="reviews__arrow reviews__arrow--next" data-js="reviews-next" aria-label="Наступний відгук">›</button>
     </div>
 
     <!-- MOBILE: compact 2-row horizontal mosaic -> fullscreen gallery -->
-    <div id="revGrid" data-js="reviews-grid" style="display:none;margin-top:22px"></div>
-    <div id="revGridHint" style="display:none;font:600 13px 'Montserrat';color:#a3a39a;margin-top:12px;text-align:center">← гортайте вбік · торкніться, щоб відкрити · <span data-js="reviews-count"></span> відгуків</div>
+    <div class="reviews__grid" data-js="reviews-grid"></div>
+    <div class="reviews__hint">← гортайте вбік · торкніться, щоб відкрити · <span data-js="reviews-count"></span> відгуків</div>
   </div>
 </section>
 
 <!-- ============ 9. CERTIFICATES ============ -->
-<section style="background:#f6f5f0;padding:76px 0">
-  <div data-rs="pad-side" style="max-width:1200px;margin:0 auto;padding:0 40px">
-    <span style="display:inline-block;background:#a3ce2e;color:#15140f;font:800 12px 'Montserrat';letter-spacing:.07em;text-transform:uppercase;padding:7px 14px;border-radius:99px">Гарантія якості</span>
-    <h2 data-rs="fs-40-800" style="font:800 40px/1.1 'Montserrat';letter-spacing:-.01em;margin:16px 0 0">Безпечно та офіційно</h2>
-    <p style="font:500 18px/1.55 'Montserrat';color:#5c5f58;max-width:760px;margin:14px 0 0">Ми такі ж пет-батьки, як і ви, тож робимо корм, якому довіряємо самі. Виробляється в Україні, з відкритими сертифікатами та протоколами випробувань.</p>
-    <div data-rs="stack" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:28px 0">
-      <div style="background:#fff;border:1px solid #ebeae3;border-radius:18px;padding:28px;box-shadow:0 4px 16px rgba(21,20,15,.04)">
-        <div style="display:flex;gap:10px">
-          <span style="display:inline-block;background:#7aa516;color:#fff;font:900 14px 'Montserrat';letter-spacing:.04em;padding:7px 14px;border-radius:8px">FEDIAF</span>
-          <span style="display:inline-block;background:#7aa516;color:#fff;font:900 14px 'Montserrat';letter-spacing:.04em;padding:7px 14px;border-radius:8px">AAFCO</span>
+<section class="section section--sand">
+  <div class="container">
+    <span class="pill">Гарантія якості</span>
+    <h2 class="section-title section-title--gap">Безпечно та офіційно</h2>
+    <p class="section-lede">Ми такі ж пет-батьки, як і ви, тож робимо корм, якому довіряємо самі. Виробляється в Україні, з відкритими сертифікатами та протоколами випробувань.</p>
+    <div class="certs">
+      <div class="cert-card">
+        <div class="cert-card__badges">
+          <span class="cert-badge">FEDIAF</span>
+          <span class="cert-badge">AAFCO</span>
         </div>
-        <h3 style="font:800 20px/1.25 'Montserrat';letter-spacing:-.01em;margin:16px 0 0">Відповідає стандартам FEDIAF і&nbsp;AAFCO</h3>
-        <p style="font:500 15px/1.55 'Montserrat';color:#5c5f58;margin:10px 0 0">Баланс поживних речовин за нормами провідних світових організацій з повнораціонного харчування тварин.</p>
+        <h3 class="cert-card__title">Відповідає стандартам FEDIAF і&nbsp;AAFCO</h3>
+        <p class="cert-card__text">Баланс поживних речовин за нормами провідних світових організацій з повнораціонного харчування тварин.</p>
       </div>
-      <div style="background:#fff;border:1px solid #ebeae3;border-radius:18px;padding:28px;box-shadow:0 4px 16px rgba(21,20,15,.04)">
-        <div style="display:flex;align-items:center;gap:12px">
-          <span style="flex:none;width:38px;height:38px;border-radius:50%;background:#7aa516;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
-          <span style="font:900 20px 'Montserrat';letter-spacing:.02em;color:#15140f">ISO 22000</span>
+      <div class="cert-card">
+        <div class="cert-card__iso">
+          <span class="cert-card__check"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <span class="cert-card__iso-label">ISO 22000</span>
         </div>
-        <p style="font:500 15px/1.55 'Montserrat';color:#5c5f58;margin:14px 0 0">Міжнародний стандарт системи управління безпечністю харчових продуктів на виробництві.</p>
+        <p class="cert-card__text cert-card__text--iso">Міжнародний стандарт системи управління безпечністю харчових продуктів на виробництві.</p>
       </div>
     </div>
-    <div data-rs="stack" style="background:#fff;border:1px solid #ebeae3;border-radius:18px;padding:28px;box-shadow:0 4px 16px rgba(21,20,15,.04);display:grid;grid-template-columns:1fr 1.1fr;gap:28px;align-items:center">
+    <div class="cert-lab">
       <div>
-        <span style="display:inline-block;background:#7aa516;color:#fff;font:900 14px 'Montserrat';letter-spacing:.04em;padding:7px 14px;border-radius:8px">ПЕРЕВІРЕНО</span>
-        <h3 style="font:800 20px/1.25 'Montserrat';letter-spacing:-.01em;margin:16px 0 0">Лабораторний аналіз</h3>
-        <p style="font:500 15px/1.55 'Montserrat';color:#5c5f58;margin:10px 0 0">Незалежні лабораторні протоколи підтверджують склад та відповідність нормам безпеки харчових продуктів.</p>
+        <span class="cert-badge">ПЕРЕВІРЕНО</span>
+        <h3 class="cert-card__title">Лабораторний аналіз</h3>
+        <p class="cert-card__text">Незалежні лабораторні протоколи підтверджують склад та відповідність нормам безпеки харчових продуктів.</p>
       </div>
-      <image-slot id="cert-lab" shape="rounded" radius="14" placeholder="Документ з лабораторним аналізом" style="width:100%;height:230px;display:block;border:1px dashed #d6d5cd;background:#fff"></image-slot>
+      <image-slot class="cert-lab__slot" id="cert-lab" shape="rounded" radius="14" placeholder="Документ з лабораторним аналізом"></image-slot>
     </div>
   </div>
 </section>
 
 <!-- ============ 10. GUARANTEE (lime band) ============ -->
-<section data-rs="pad-side" style="background:#f6f5f0;padding:0 40px 76px">
-  <div data-rs="grid-icon pad-guarantee" style="max-width:1200px;margin:0 auto;background:#a3ce2e;border-radius:24px;padding:44px;display:grid;grid-template-columns:96px 1fr;gap:28px;align-items:center">
-    <div data-rs="fs-76" style="font-size:76px;text-align:center">🛡️</div>
+<section class="band">
+  <div class="guarantee">
+    <div class="guarantee__icon">🛡️</div>
     <div>
-      <h2 data-rs="fs-34" style="font:800 34px/1.12 'Montserrat';letter-spacing:-.01em;margin:0 0 8px">Гарантія «Собака їсть — або повертаємо гроші»</h2>
-      <p style="font:600 17px/1.5 'Montserrat';margin:0;max-width:780px">Спробуйте всі 3 смаки. Якщо за 30 днів жоден не підійшов або собака відмовилась — повернемо 100% вартості. Недоїдену пачку повертати не треба. Весь ризик — на нас.</p>
+      <h2 class="guarantee__title">Гарантія «Собака їсть — або повертаємо гроші»</h2>
+      <p class="guarantee__text">Спробуйте всі 3 смаки. Якщо за 30 днів жоден не підійшов або собака відмовилась — повернемо 100% вартості. Недоїдену пачку повертати не треба. Весь ризик — на нас.</p>
     </div>
   </div>
 </section>
 
 <!-- ============ 11. CHECKOUT ============ -->
-<section id="order" style="background:#fff;border-top:1px solid #ebeae3;padding:76px 0">
-  <div data-rs="pad-side" style="max-width:1200px;margin:0 auto;padding:0 40px">
-    <span style="display:inline-block;background:#a3ce2e;color:#15140f;font:800 12px 'Montserrat';letter-spacing:.07em;text-transform:uppercase;padding:7px 14px;border-radius:99px">Оформлення замовлення</span>
-    <h2 data-rs="fs-40-800" style="font:800 40px/1.1 'Montserrat';letter-spacing:-.01em;margin:16px 0 0">Замовте сет за 1 хвилину</h2>
-    <div data-rs="stack" style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;margin-top:26px">
+<section class="section section--white section--bordered" id="order">
+  <div class="container">
+    <span class="pill">Оформлення замовлення</span>
+    <h2 class="section-title section-title--gap">Замовте сет за 1 хвилину</h2>
+    <div class="order__grid">
       <!-- form -->
-      <div style="background:#fff;border:1px solid #ebeae3;border-radius:22px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.05)">
-        <div style="background:#15140f;color:#fff;padding:18px 26px;font:800 18px 'Montserrat'">Ваше замовлення</div>
-        <div style="padding:26px">
-          <div style="margin:0 0 14px"><label style="display:block;font:700 13px 'Montserrat';color:#8a8d86;margin-bottom:6px">Ім'я та прізвище</label><input placeholder="Ім'я та прізвище" style="width:100%;padding:14px;border:1px solid #ebeae3;border-radius:12px;font:500 15px 'Montserrat';background:#fafaf8"></div>
-          <div style="margin:0 0 14px"><label style="display:block;font:700 13px 'Montserrat';color:#8a8d86;margin-bottom:6px">Телефон</label><input placeholder="+38 (0__) ___ __ __" style="width:100%;padding:14px;border:1px solid #ebeae3;border-radius:12px;font:500 15px 'Montserrat';background:#fafaf8"></div>
-          <div style="margin:0 0 14px"><label style="display:block;font:700 13px 'Montserrat';color:#8a8d86;margin-bottom:6px">Email</label><input type="email" placeholder="you@email.com" style="width:100%;padding:14px;border:1px solid #ebeae3;border-radius:12px;font:500 15px 'Montserrat';background:#fafaf8"></div>
-          <div style="margin:0 0 14px"><label style="display:block;font:700 13px 'Montserrat';color:#8a8d86;margin-bottom:6px">Розмір собаки</label><select style="width:100%;padding:14px;border:1px solid #ebeae3;border-radius:12px;font:500 15px 'Montserrat';background:#fafaf8"><option>Дрібна порода (сет 3×300 г)</option><option>Середня / велика порода (сет 3×300 г)</option></select></div>
-          <div style="margin:0 0 14px"><label style="display:block;font:700 13px 'Montserrat';color:#8a8d86;margin-bottom:6px">Відділення Нової Пошти</label><input placeholder="Місто, № відділення" style="width:100%;padding:14px;border:1px solid #ebeae3;border-radius:12px;font:500 15px 'Montserrat';background:#fafaf8"></div>
+      <div class="order-form">
+        <div class="order-form__header">Ваше замовлення</div>
+        <div class="order-form__body">
+          <div class="field"><label class="field__label">Ім'я та прізвище</label><input class="field__control" placeholder="Ім'я та прізвище"></div>
+          <div class="field"><label class="field__label">Телефон</label><input class="field__control" placeholder="+38 (0__) ___ __ __"></div>
+          <div class="field"><label class="field__label">Email</label><input class="field__control" type="email" placeholder="you@email.com"></div>
+          <div class="field"><label class="field__label">Розмір собаки</label><select class="field__control"><option>Дрібна порода (сет 3×300 г)</option><option>Середня / велика порода (сет 3×300 г)</option></select></div>
+          <div class="field"><label class="field__label">Відділення Нової Пошти</label><input class="field__control" placeholder="Місто, № відділення"></div>
 
           <!-- payment method -->
-          <div style="margin:0 0 14px"><label style="display:block;font:700 13px 'Montserrat';color:#8a8d86;margin-bottom:6px">Спосіб оплати</label>
-            <div style="display:flex;gap:10px">
-              <button type="button" data-js="pay-method" data-method="cod" style="flex:1;border:2px solid #a3ce2e;background:#f1f7e3;font:800 14px 'Montserrat';color:#15140f;padding:12px 10px;border-radius:12px;cursor:pointer;transition:.15s">Накладений платіж</button>
-              <button type="button" data-js="pay-method" data-method="online" style="flex:1;border:1px solid #ebeae3;background:#fafaf8;font:700 14px 'Montserrat';color:#8a8d86;padding:13px 10px;border-radius:12px;cursor:pointer;transition:.15s">Онлайн оплата</button>
+          <div class="field"><label class="field__label">Спосіб оплати</label>
+            <div class="pay">
+              <button type="button" class="pay__btn is-active" data-js="pay-method" data-method="cod">Накладений платіж</button>
+              <button type="button" class="pay__btn" data-js="pay-method" data-method="online">Онлайн оплата</button>
             </div>
           </div>
 
           <!-- upsell -->
-          <div data-js="upsell" style="border:2px solid #ec7d2a;background:#fff6ee;border-radius:16px;padding:16px;display:flex;gap:16px;align-items:center;margin:18px 0;cursor:pointer">
-            <img src="images/smakolyky-kachka.jpeg" alt="Квадратні смаколики з качкою" style="width:66px;height:66px;border-radius:12px;object-fit:contain;background:#fff;flex:none">
-            <div><b style="font:800 15px 'Montserrat'">Додати смаколики з качкою?</b><div style="font:500 14px 'Montserrat';color:#5c5f58">Квадратні м'ясні ласощі, 80 г — ідеальні для дресури. <b style="color:#ec7d2a">+220 грн</b></div></div>
-            <div data-js="upsell-knob-on" style="margin-left:auto;width:54px;height:32px;border-radius:99px;background:#a3ce2e;position:relative;flex:none"><div style="position:absolute;right:3px;top:3px;width:26px;height:26px;border-radius:50%;background:#fff"></div></div>
-            <div data-js="upsell-knob-off" style="margin-left:auto;width:54px;height:32px;border-radius:99px;background:#d6d5cd;position:relative;flex:none;display:none"><div style="position:absolute;left:3px;top:3px;width:26px;height:26px;border-radius:50%;background:#fff"></div></div>
+          <div class="upsell" data-js="upsell">
+            <img class="upsell__image" src="images/smakolyky-kachka.jpeg" alt="Квадратні смаколики з качкою">
+            <div><b class="upsell__title">Додати смаколики з качкою?</b><div class="upsell__text">Квадратні м'ясні ласощі, 80 г — ідеальні для дресури. <b class="upsell__price">+220 грн</b></div></div>
+            <div class="upsell__knob upsell__knob--on" data-js="upsell-knob-on"><div class="upsell__dot upsell__dot--right"></div></div>
+            <div class="upsell__knob upsell__knob--off" data-js="upsell-knob-off"><div class="upsell__dot upsell__dot--left"></div></div>
           </div>
 
-          <div style="display:flex;justify-content:space-between;align-items:center;font:900 24px 'Montserrat';letter-spacing:-.02em;margin:20px 0;padding-top:18px;border-top:1px solid #ebeae3"><span>Разом</span><span data-js="order-total"></span></div>
-          <a href="#" style="display:flex;align-items:center;justify-content:center;gap:14px;background:#a3ce2e;color:#15140f;text-decoration:none;font:800 18px 'Montserrat';padding:16px;border-radius:99px">Підтвердити замовлення<span style="width:42px;height:42px;border-radius:50%;background:#15140f;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px">↗</span></a>
-          <p data-js="pay-note" style="font:500 12px 'Montserrat';color:#8a8d86;text-align:center;margin:14px 0 0"></p>
+          <div class="order-form__total"><span>Разом</span><span data-js="order-total"></span></div>
+          <a class="order-form__submit" href="#">Підтвердити замовлення<span class="order-form__submit-icon">↗</span></a>
+          <p class="order-form__note" data-js="pay-note"></p>
         </div>
       </div>
       <!-- value stack -->
       <div>
-        <div style="background:#faf9f5;border:1px solid #ebeae3;border-radius:18px;padding:28px">
-          <h3 style="font:800 22px 'Montserrat';margin:0">Що ви отримуєте</h3>
-          <div style="margin-top:14px">
-            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-bottom:1px dashed #ebeae3"><span style="font:500 15px 'Montserrat'">Дегустаційний сет: 3×300 г, 3 смаки</span><b style="font:700 14px 'Montserrat';color:#8a8d86;text-decoration:line-through;white-space:nowrap">550 грн</b></div>
-            <div data-js="upsell-line" style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-bottom:1px dashed #ebeae3"><span style="font:500 15px 'Montserrat'">Смаколики з качкою, 80 г</span><b style="font:700 14px 'Montserrat';color:#15140f;white-space:nowrap">+220 грн</b></div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-bottom:1px dashed #ebeae3"><span style="font:500 15px 'Montserrat'">Пам'ятка: як плавно перевести собаку на новий корм</span><b style="font:800 14px 'Montserrat';color:#8fb822;white-space:nowrap">безкоштовно</b></div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-bottom:1px dashed #ebeae3"><span style="font:500 15px 'Montserrat'">2 печива Pure Nutrition у подарунок</span><b style="font:800 14px 'Montserrat';color:#8fb822;white-space:nowrap">безкоштовно</b></div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-bottom:1px dashed #ebeae3"><span style="font:500 15px 'Montserrat'">Доставка Новою Поштою</span><b style="font:700 13px 'Montserrat';color:#8a8d86;white-space:nowrap">за тарифом НП</b></div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0"><span style="font:500 15px 'Montserrat'">Гарантія повернення коштів 30 днів</span><b style="font:800 14px 'Montserrat';color:#8fb822">✓</b></div>
+        <div class="value">
+          <h3 class="value__title">Що ви отримуєте</h3>
+          <div class="value__list">
+            <div class="value__row value__row--divided"><span class="value__label">Дегустаційний сет: 3×300 г, 3 смаки</span><b class="value__amount--old">550 грн</b></div>
+            <div class="value__row value__row--divided" data-js="upsell-line"><span class="value__label">Смаколики з качкою, 80 г</span><b class="value__amount--add">+220 грн</b></div>
+            <div class="value__row value__row--divided"><span class="value__label">Пам'ятка: як плавно перевести собаку на новий корм</span><b class="value__amount--free">безкоштовно</b></div>
+            <div class="value__row value__row--divided"><span class="value__label">2 печива Pure Nutrition у подарунок</span><b class="value__amount--free">безкоштовно</b></div>
+            <div class="value__row value__row--divided"><span class="value__label">Доставка Новою Поштою</span><b class="value__amount--shipping">за тарифом НП</b></div>
+            <div class="value__row"><span class="value__label">Гарантія повернення коштів 30 днів</span><b class="value__amount--check">✓</b></div>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:16px;border-top:1px solid #ebeae3"><span style="font:700 15px 'Montserrat'">Разом за товар</span><b data-js="order-total" style="font:900 28px 'Montserrat';letter-spacing:-.02em"></b></div>
-          <p style="font:500 12px/1.5 'Montserrat';color:#8a8d86;margin:10px 0 0">+ доставка за тарифом Нової Пошти при отриманні</p>
+          <div class="value__total"><span class="value__total-label">Разом за товар</span><b class="value__total-amount" data-js="order-total"></b></div>
+          <p class="value__note">+ доставка за тарифом Нової Пошти при отриманні</p>
         </div>
       </div>
     </div>
@@ -511,80 +443,80 @@
 </section>
 
 <!-- ============ 12. FEEDING CALCULATOR ============ -->
-<section id="calc" style="background:#f6f5f0;border-top:1px solid #ebeae3;padding:76px 0">
-  <div data-rs="pad-side" style="max-width:1200px;margin:0 auto;padding:0 40px">
-    <span style="display:inline-block;background:#a3ce2e;color:#15140f;font:800 12px 'Montserrat';letter-spacing:.07em;text-transform:uppercase;padding:7px 14px;border-radius:99px">Калькулятор годування</span>
-    <h2 data-rs="fs-40-800" style="font:800 40px/1.1 'Montserrat';letter-spacing:-.01em;margin:16px 0 0">Скільки корму потрібно вашій собаці?</h2>
-    <p style="font:500 18px/1.55 'Montserrat';color:#5c5f58;max-width:720px;margin:14px 0 0">Вкажіть вагу собаки та смак — порахуємо місячну норму й орієнтовну вартість. Розрахунок за нормою <b style="color:#15140f">«Підтримання ваги»</b>.</p>
+<section class="section section--sand section--bordered" id="calc">
+  <div class="container">
+    <span class="pill">Калькулятор годування</span>
+    <h2 class="section-title section-title--gap">Скільки корму потрібно вашій собаці?</h2>
+    <p class="section-lede calc__lede">Вкажіть вагу собаки та смак — порахуємо місячну норму й орієнтовну вартість. Розрахунок за нормою <b class="text-ink">«Підтримання ваги»</b>.</p>
 
-    <div data-rs="stack" style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:stretch;margin-top:28px">
+    <div class="calc">
       <!-- controls -->
-      <div data-rs="pad-card" style="background:#fff;border:1px solid #ebeae3;border-radius:22px;padding:32px;box-shadow:0 4px 16px rgba(21,20,15,.04)">
-        <div style="font:800 18px 'Montserrat';color:#15140f;letter-spacing:-.01em">Вкажіть вагу вашої собаки</div>
-        <div style="display:flex;align-items:baseline;gap:8px;margin:6px 0 14px"><span data-js="calc-weight" data-rs="fs-52" style="font:900 52px 'Montserrat';letter-spacing:-.02em;line-height:1;color:#15140f;font-variant-numeric:tabular-nums"></span><span style="font:800 22px 'Montserrat';color:#8a8d86">кг</span></div>
-        <input data-js="calc-weight-input" type="range" min="2" max="40" step="1" value="10" style="width:100%;accent-color:#a3ce2e;height:6px;cursor:pointer">
-        <div style="display:flex;justify-content:space-between;font:600 12px 'Montserrat';color:#a3a39a;margin-top:6px"><span>2 кг</span><span>40 кг</span></div>
+      <div class="calc__controls">
+        <div class="calc__label">Вкажіть вагу вашої собаки</div>
+        <div class="calc__weight"><span class="calc__weight-value" data-js="calc-weight"></span><span class="calc__weight-unit">кг</span></div>
+        <input class="calc__slider" data-js="calc-weight-input" type="range" min="2" max="40" step="1" value="10">
+        <div class="calc__ticks"><span>2 кг</span><span>40 кг</span></div>
 
-        <div style="height:1px;background:#ebeae3;margin:24px 0"></div>
+        <div class="calc__divider"></div>
 
-        <div style="font:800 18px 'Montserrat';color:#15140f;letter-spacing:-.01em;margin-bottom:12px">Оберіть корм</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <button type="button" data-js="calc-flavor" data-flavor="beef" style="display:flex;align-items:center;gap:10px;border:2px solid #a3ce2e;background:#f1f7e3;font:800 15px 'Montserrat';color:#15140f;padding:13px 16px;border-radius:14px;cursor:pointer;text-align:left;transition:.15s"><span style="font-size:20px">🥩</span> Соковита яловичина</button>
-          <button type="button" data-js="calc-flavor" data-flavor="turkey" style="display:flex;align-items:center;gap:10px;border:1px solid #ebeae3;background:#fafaf8;font:700 15px 'Montserrat';color:#5c5f58;padding:14px 16px;border-radius:14px;cursor:pointer;text-align:left;transition:.15s"><span style="font-size:20px">🦃</span> Ніжна індичка</button>
-          <button type="button" data-js="calc-flavor" data-flavor="salmon" style="display:flex;align-items:center;gap:10px;border:1px solid #ebeae3;background:#fafaf8;font:700 15px 'Montserrat';color:#5c5f58;padding:14px 16px;border-radius:14px;cursor:pointer;text-align:left;transition:.15s"><span style="font-size:20px">🐟</span> Делікатний лосось</button>
+        <div class="calc__label calc__label--spaced">Оберіть корм</div>
+        <div class="calc__flavors">
+          <button type="button" class="calc__flavor is-active" data-js="calc-flavor" data-flavor="beef"><span class="calc__flavor-emoji">🥩</span> Соковита яловичина</button>
+          <button type="button" class="calc__flavor" data-js="calc-flavor" data-flavor="turkey"><span class="calc__flavor-emoji">🦃</span> Ніжна індичка</button>
+          <button type="button" class="calc__flavor" data-js="calc-flavor" data-flavor="salmon"><span class="calc__flavor-emoji">🐟</span> Делікатний лосось</button>
         </div>
       </div>
 
       <!-- result -->
-      <div data-rs="pad-card" style="position:relative;overflow:hidden;background:#15140f;border-radius:22px;padding:32px;color:#fff">
-        <div style="position:absolute;top:-120px;right:-90px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(163,206,46,.20),rgba(163,206,46,0) 68%)"></div>
-        <div style="position:relative">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.14)">
-            <span style="font:600 15px 'Montserrat';opacity:.85">Орієнтовна добова норма корму</span>
-            <span style="font:800 22px 'Montserrat';color:#fff;font-variant-numeric:tabular-nums"><span data-js="calc-daily"></span> г / день</span>
+      <div class="calc__result">
+        <div class="calc__glow"></div>
+        <div class="calc__result-content">
+          <div class="calc__daily">
+            <span class="calc__daily-label">Орієнтовна добова норма корму</span>
+            <span class="calc__daily-value"><span data-js="calc-daily"></span> г / день</span>
           </div>
-          <div style="margin:22px 0 4px">
-            <div style="font:600 12px 'Montserrat';text-transform:uppercase;letter-spacing:.06em;opacity:.7">Орієнтовна кількість корму на місяць</div>
-            <div data-rs="fs-40-900" style="font:900 40px 'Montserrat';letter-spacing:-.02em;line-height:1.05;color:#a3ce2e;margin-top:8px;font-variant-numeric:tabular-nums"><span data-js="calc-kg-month"></span> <span style="font-size:22px">кг</span></div>
-            <div style="font:600 12px 'Montserrat';text-transform:uppercase;letter-spacing:.06em;opacity:.7;margin-top:20px">Орієнтовна вартість </div>
-            <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:8px">
-              <div data-rs="fs-40-900" style="font:900 40px 'Montserrat';letter-spacing:-.02em;line-height:1.05;color:#a3ce2e;font-variant-numeric:tabular-nums"><span data-js="calc-cost"></span> <span style="font-size:22px">грн/міс</span></div>
+          <div class="calc__figures">
+            <div class="calc__caption">Орієнтовна кількість корму на місяць</div>
+            <div class="calc__figure calc__figure--gap"><span data-js="calc-kg-month"></span> <span class="calc__figure-unit">кг</span></div>
+            <div class="calc__caption calc__caption--spaced">Орієнтовна вартість </div>
+            <div class="calc__cost-row">
+              <div class="calc__figure"><span data-js="calc-cost"></span> <span class="calc__figure-unit">грн/міс</span></div>
             </div>
-            <div style="font:500 13px 'Montserrat';opacity:.7;margin-top:10px">Рекомендована фасовка: <b data-js="calc-pack" style="opacity:1"></b></div>
+            <div class="calc__pack">Рекомендована фасовка: <b class="calc__pack-value" data-js="calc-pack"></b></div>
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:18px">
-            <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border-radius:99px;padding:8px 15px;font:700 13px 'Montserrat'">≈ <span data-js="calc-per-kg"></span> грн/кг</div>
-            <div data-js="calc-line" style="display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border-radius:99px;padding:8px 15px;font:700 13px 'Montserrat'"></div>
+          <div class="calc__chips">
+            <div class="calc__chip">≈ <span data-js="calc-per-kg"></span> грн/кг</div>
+            <div class="calc__chip" data-js="calc-line"></div>
           </div>
-        </div><a href="#order" style="display:inline-flex;align-items:center;gap:14px;background:#a3ce2e;color:#15140f;text-decoration:none;font:800 16px 'Montserrat';padding:9px 9px 9px 26px;border-radius:99px;margin-top:28px">Замовити корм<span style="width:44px;height:44px;border-radius:50%;background:#15140f;display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px">↗</span></a>
+        </div><a class="calc__cta" href="#order">Замовити корм<span class="calc__cta-icon">↗</span></a>
       </div>
     </div>
-    <p style="font:500 13px/1.5 'Montserrat';color:#a3a39a;margin:16px 0 0;max-width:760px">Розрахунок орієнтовний. Кожен песик унікальний — реальна норма залежить від віку, активності та умов утримання. Лінійку корму та фасовку добираємо за вагою собаки. Показана вартість уже враховує знижку −10% при реєстрації на сайті.</p>
+    <p class="calc__disclaimer">Розрахунок орієнтовний. Кожен песик унікальний — реальна норма залежить від віку, активності та умов утримання. Лінійку корму та фасовку добираємо за вагою собаки. Показана вартість уже враховує знижку −10% при реєстрації на сайті.</p>
   </div>
 </section>
 
 <!-- ============ 12b. PRICE LIST (low-emphasis) ============ -->
-<section id="price" style="background:#fff;border-top:1px solid #ebeae3;padding:56px 0">
-  <div data-rs="pad-side" style="max-width:1200px;margin:0 auto;padding:0 40px">
-    <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px">
+<section class="price-section" id="price">
+  <div class="container">
+    <div class="price__head">
       <div>
-        <div style="font:700 12px 'Montserrat';letter-spacing:.08em;text-transform:uppercase;color:#a3a39a">Прайс</div>
-        <h3 style="font:800 24px 'Montserrat';letter-spacing:-.01em;color:#3a3a34;margin:6px 0 0">Ціни на корм за обʼємом</h3>
+        <div class="price__eyebrow">Прайс</div>
+        <h3 class="price__title">Ціни на корм за обʼємом</h3>
       </div>
-      <span style="font:500 13px 'Montserrat';color:#8a8d86">Дві лінійки — для малих та для середніх і великих порід</span>
+      <span class="price__note">Дві лінійки — для малих та для середніх і великих порід</span>
     </div>
 
-    <div data-rs="stack" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:22px">
+    <div class="price__grid">
 
       <!-- LARGE breeds: 1 / 5 / 10 -->
       <div>
-        <div style="font:700 13px 'Montserrat';color:#3a3a34;margin:0 0 10px">🐕 Для середніх і великих порід</div>
-        <div style="border:1px solid #ebeae3;border-radius:16px;overflow:hidden">
-          <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;background:#faf9f5;border-bottom:1px solid #ebeae3">
-            <div style="font:700 11px 'Montserrat';letter-spacing:.04em;text-transform:uppercase;color:#8a8d86;padding:12px 16px">Смак</div>
-            <div style="font:700 11px 'Montserrat';letter-spacing:.04em;text-transform:uppercase;color:#8a8d86;padding:12px 8px;text-align:right">1 кг</div>
-            <div style="font:700 11px 'Montserrat';letter-spacing:.04em;text-transform:uppercase;color:#8a8d86;padding:12px 8px;text-align:right">5 кг</div>
-            <div style="font:700 11px 'Montserrat';letter-spacing:.04em;text-transform:uppercase;color:#8a8d86;padding:12px 16px 12px 8px;text-align:right">10 кг</div>
+        <div class="price__label">🐕 Для середніх і великих порід</div>
+        <div class="price-table">
+          <div class="price-table__head">
+            <div class="price-table__th">Смак</div>
+            <div class="price-table__th price-table__th--num">1 кг</div>
+            <div class="price-table__th price-table__th--num">5 кг</div>
+            <div class="price-table__th price-table__th--last">10 кг</div>
           </div>
           <div data-js="price-rows" data-line="large"></div>
         </div>
@@ -592,13 +524,13 @@
 
       <!-- SMALL breeds: 1 / 3 / 5 -->
       <div>
-        <div style="font:700 13px 'Montserrat';color:#3a3a34;margin:0 0 10px">🐩 Для малих порід</div>
-        <div style="border:1px solid #ebeae3;border-radius:16px;overflow:hidden">
-          <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;background:#faf9f5;border-bottom:1px solid #ebeae3">
-            <div style="font:700 11px 'Montserrat';letter-spacing:.04em;text-transform:uppercase;color:#8a8d86;padding:12px 16px">Смак</div>
-            <div style="font:700 11px 'Montserrat';letter-spacing:.04em;text-transform:uppercase;color:#8a8d86;padding:12px 8px;text-align:right">1 кг</div>
-            <div style="font:700 11px 'Montserrat';letter-spacing:.04em;text-transform:uppercase;color:#8a8d86;padding:12px 8px;text-align:right">3 кг</div>
-            <div style="font:700 11px 'Montserrat';letter-spacing:.04em;text-transform:uppercase;color:#8a8d86;padding:12px 16px 12px 8px;text-align:right">5 кг</div>
+        <div class="price__label">🐩 Для малих порід</div>
+        <div class="price-table">
+          <div class="price-table__head">
+            <div class="price-table__th">Смак</div>
+            <div class="price-table__th price-table__th--num">1 кг</div>
+            <div class="price-table__th price-table__th--num">3 кг</div>
+            <div class="price-table__th price-table__th--last">5 кг</div>
           </div>
           <div data-js="price-rows" data-line="small"></div>
         </div>
@@ -606,71 +538,71 @@
 
     </div>
 
-    <p style="font:500 13px/1.5 'Montserrat';color:#a3a39a;margin:16px 0 0;max-width:820px">Ціни вказані за упаковку (грн). Що більша фасовка — то нижча ціна за кілограм. Для малих порід фасування 10 кг не передбачено. При реєстрації на сайті — додатково −10% до підсумкової суми.</p>
+    <p class="price__disclaimer">Ціни вказані за упаковку (грн). Що більша фасовка — то нижча ціна за кілограм. Для малих порід фасування 10 кг не передбачено. При реєстрації на сайті — додатково −10% до підсумкової суми.</p>
   </div>
 </section>
 
 <!-- ============ FOOTER ============ -->
-<footer style="background:#15140f;color:#bdbdb6;padding:40px 0">
-  <div data-rs="pad-side" style="max-width:1200px;margin:0 auto;padding:0 40px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;align-items:center">
+<footer class="site-footer">
+  <div class="container footer__inner">
     <div>
-      <img src="images/logo.svg" alt="Pure Nutrition" style="height:34px;width:auto;display:block;filter:brightness(0) invert(1)">
-      <p style="font:500 14px 'Montserrat';margin:12px 0 0">Сухий корм для собак • виробництво України</p>
+      <img class="footer__logo" src="images/logo.svg" alt="Pure Nutrition">
+      <p class="footer__text">Сухий корм для собак • виробництво України</p>
     </div>
-    <div style="font:600 15px/1.6 'Montserrat'"><a href="tel:+380770775700" style="color:#fff;text-decoration:none">+38 (077) 077 57 00</a><br><span style="color:#bdbdb6">info@pure-nutrition.com.ua</span></div>
+    <div class="footer__contacts"><a class="footer__phone" href="tel:+380770775700">+38 (077) 077 57 00</a><br><span class="footer__email">info@pure-nutrition.com.ua</span></div>
   </div>
 </footer>
 
 <!-- ============ REVIEWS LIGHTBOX (fullscreen gallery) ============ -->
-<div data-js="lightbox" style="position:fixed;inset:0;z-index:95;background:rgba(10,9,7,.94);display:none;flex-direction:column">
-  <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;color:#fff">
-    <span style="font:800 15px 'Montserrat';font-variant-numeric:tabular-nums"><span data-js="lightbox-position"></span> / <span data-js="reviews-count"></span></span>
-    <button type="button" data-js="lightbox-close" aria-label="Закрити" style="width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font:400 24px 'Montserrat';cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center">×</button>
+<div class="lightbox" data-js="lightbox">
+  <div class="lightbox__bar">
+    <span class="lightbox__counter"><span data-js="lightbox-position"></span> / <span data-js="reviews-count"></span></span>
+    <button type="button" class="lightbox__close" data-js="lightbox-close" aria-label="Закрити">×</button>
   </div>
-  <div data-js="lightbox-stage" style="flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:0 8px 8px">
-    <img data-js="lightbox-image" alt="Відгук клієнта Pure Nutrition" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.5)">
+  <div class="lightbox__stage" data-js="lightbox-stage">
+    <img class="lightbox__image" data-js="lightbox-image" alt="Відгук клієнта Pure Nutrition">
   </div>
-  <div style="flex:none;display:flex;align-items:center;justify-content:center;gap:18px;padding:10px 18px 26px">
-    <button type="button" data-js="lightbox-prev" aria-label="Попередній" style="width:56px;height:56px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font:600 26px 'Montserrat';cursor:pointer;display:flex;align-items:center;justify-content:center;padding-bottom:3px">‹</button>
-    <button type="button" data-js="lightbox-next" aria-label="Наступний" style="width:56px;height:56px;border-radius:50%;border:0;background:#a3ce2e;color:#15140f;font:600 26px 'Montserrat';cursor:pointer;display:flex;align-items:center;justify-content:center;padding-bottom:3px">›</button>
+  <div class="lightbox__nav">
+    <button type="button" class="lightbox__arrow" data-js="lightbox-prev" aria-label="Попередній">‹</button>
+    <button type="button" class="lightbox__arrow lightbox__arrow--next" data-js="lightbox-next" aria-label="Наступний">›</button>
   </div>
 </div>
 
 <!-- ============ COMPOSITION MODAL ============ -->
-<div data-js="modal" style="position:fixed;inset:0;z-index:90;background:rgba(21,20,15,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:24px">
-  <div data-js="modal-dialog" style="background:#fff;border-radius:24px;max-width:680px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.35)">
-    <div style="position:sticky;top:0;background:#fff;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:26px 28px 18px;border-bottom:1px solid #ebeae3">
-      <div style="display:flex;align-items:center;gap:14px">
-        <div data-js="modal-emoji" style="flex:none;width:54px;height:54px;border-radius:14px;background:#f6f5f0;display:flex;align-items:center;justify-content:center;font-size:28px"></div>
+<div class="modal" data-js="modal">
+  <div class="modal__dialog" data-js="modal-dialog">
+    <div class="modal__header">
+      <div class="modal__brand">
+        <div class="modal__emoji" data-js="modal-emoji"></div>
         <div>
-          <h3 data-js="modal-title" style="font:800 23px 'Montserrat';letter-spacing:-.01em;margin:0"></h3>
-          <div data-js="modal-breed" style="font:600 13px 'Montserrat';color:#8a8d86;margin-top:2px"></div>
+          <h3 class="modal__title" data-js="modal-title"></h3>
+          <div class="modal__subtitle" data-js="modal-breed"></div>
         </div>
       </div>
-      <button type="button" data-js="modal-close" style="flex:none;width:38px;height:38px;border-radius:50%;border:1px solid #ebeae3;background:#f6f5f0;color:#15140f;font:700 18px 'Montserrat';cursor:pointer;line-height:1">×</button>
+      <button type="button" class="modal__close" data-js="modal-close">×</button>
     </div>
-    <div style="padding:24px 28px 30px">
-      <div style="font:700 11px 'Montserrat';color:#a3a39a;letter-spacing:.07em;text-transform:uppercase">Склад</div>
-      <p data-js="modal-ingredients" style="font:500 14.5px/1.65 'Montserrat';color:#3a3a34;margin:8px 0 22px"></p>
+    <div class="modal__body">
+      <div class="modal__caption">Склад</div>
+      <p class="modal__ingredients" data-js="modal-ingredients"></p>
 
-      <div data-rs="stack" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-        <div style="background:#faf9f5;border:1px solid #ebeae3;border-radius:14px;padding:16px">
-          <div style="font:700 11px 'Montserrat';color:#a3a39a;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px">Поживні речовини</div>
-          <p data-js="modal-nutrition" style="font:500 13.5px/1.55 'Montserrat';color:#5c5f58;margin:0"></p>
+      <div class="modal__grid">
+        <div class="modal__card">
+          <div class="modal__card-caption">Поживні речовини</div>
+          <p class="modal__card-text" data-js="modal-nutrition"></p>
         </div>
-        <div style="background:#faf9f5;border:1px solid #ebeae3;border-radius:14px;padding:16px">
-          <div style="font:700 11px 'Montserrat';color:#a3a39a;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px">Мікроелементи (на 1 кг)</div>
-          <p data-js="modal-micro" style="font:500 13.5px/1.55 'Montserrat';color:#5c5f58;margin:0"></p>
+        <div class="modal__card">
+          <div class="modal__card-caption">Мікроелементи (на 1 кг)</div>
+          <p class="modal__card-text" data-js="modal-micro"></p>
         </div>
-        <div style="background:#faf9f5;border:1px solid #ebeae3;border-radius:14px;padding:16px;grid-column:1/-1">
-          <div style="font:700 11px 'Montserrat';color:#a3a39a;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px">Вітаміни (на 1 кг)</div>
-          <p data-js="modal-vitamins" style="font:500 13.5px/1.55 'Montserrat';color:#5c5f58;margin:0"></p>
+        <div class="modal__card modal__card--wide">
+          <div class="modal__card-caption">Вітаміни (на 1 кг)</div>
+          <p class="modal__card-text" data-js="modal-vitamins"></p>
         </div>
       </div>
 
-      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:18px">
-        <div style="flex:1;min-width:200px;background:#f1f7e3;border:1px solid #dcebbf;border-radius:14px;padding:16px"><div data-js="modal-energy" style="font:900 22px 'Montserrat';color:#7aa516;letter-spacing:-.01em"></div><div style="font:600 12px 'Montserrat';color:#5c5f58;margin-top:4px">Енергетична цінність</div></div>
-        <div style="flex:1;min-width:200px;background:#f1f7e3;border:1px solid #dcebbf;border-radius:14px;padding:16px"><div data-js="modal-animal" style="font:900 22px 'Montserrat';color:#7aa516;letter-spacing:-.01em"></div></div>
+      <div class="modal__stats">
+        <div class="modal__stat"><div class="modal__stat-value" data-js="modal-energy"></div><div class="modal__stat-label">Енергетична цінність</div></div>
+        <div class="modal__stat"><div class="modal__stat-value" data-js="modal-animal"></div></div>
       </div>
     </div>
   </div>

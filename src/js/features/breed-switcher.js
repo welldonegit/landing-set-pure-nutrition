@@ -1,5 +1,4 @@
 import { SETS } from '../data/products.js';
-import { segOn, segOff } from './button-styles.js';
 
 const FLAVORS = ['beef', 'turkey', 'salmon'];
 
@@ -25,8 +24,8 @@ export function initBreedSwitcher(root = document) {
     const set = SETS[breed];
     const isSmall = breed === 'small';
 
-    smallBtn.setAttribute('style', isSmall ? segOn : segOff);
-    largeBtn.setAttribute('style', isSmall ? segOff : segOn);
+    smallBtn.classList.toggle('is-active', isSmall);
+    largeBtn.classList.toggle('is-active', !isSmall);
     granuleEl.textContent = set.granule;
 
     for (const flavor of FLAVORS) {

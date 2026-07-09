@@ -1,0 +1,21 @@
+/* Порядок важливий: токени -> база -> layout -> компоненти. */
+@import './tokens.css';
+@import './base.css';
+@import './layout.css';
+
+@import './components/header.css';
+@import './components/hero.css';
+@import './components/flavors.css';
+@import './components/care.css';
+@import './components/compare.css';
+@import './components/bonus.css';
+@import './components/timer.css';
+@import './components/reviews.css';
+@import './components/certificates.css';
+@import './components/guarantee.css';
+@import './components/order.css';
+@import './components/calculator.css';
+@import './components/price.css';
+@import './components/footer.css';
+@import './components/modal.css';
+@import './components/lightbox.css';

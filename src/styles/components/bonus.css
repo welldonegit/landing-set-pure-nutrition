@@ -1,0 +1,139 @@
+.bonus__title {
+  max-width: 760px;
+}
+
+.bonus__lede {
+  margin: 16px 0 0;
+  max-width: 660px;
+}
+
+/* Картка виходить за поля контейнера на десктопі (margin: -40px). */
+.bonus {
+  position: relative;
+  overflow: hidden;
+  background: #f2f6e4;
+  border: 1px solid #e2ecc4;
+  border-radius: 28px;
+  padding: 46px 48px;
+  color: var(--ink);
+  margin: 36px -40px 0;
+}
+
+.bonus__glow {
+  position: absolute;
+  top: -140px;
+  right: -110px;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(163, 206, 46, .32), rgba(163, 206, 46, 0) 68%);
+}
+
+.bonus__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 44px;
+  align-items: center;
+}
+
+.bonus__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--accent);
+  font: 800 12px var(--font);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border-radius: 99px;
+}
+
+.bonus__heading {
+  font: 800 34px/1.12 var(--font);
+  letter-spacing: -.01em;
+  color: var(--ink);
+  margin: 18px 0 0;
+  max-width: 440px;
+}
+
+.bonus__text {
+  font: 500 15px/1.55 var(--font);
+  color: var(--ink-muted);
+  margin: 14px 0 26px;
+  max-width: 430px;
+}
+
+.bonus__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--ink);
+  color: var(--surface);
+  text-decoration: none;
+  font: 800 16px var(--font);
+  padding: 8px 8px 8px 24px;
+  border-radius: 99px;
+}
+
+.bonus__cta-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  font-size: 18px;
+}
+
+.bonus__card {
+  background: var(--surface);
+  border: 1px solid #e2ecc4;
+  border-radius: 20px;
+  padding: 30px 32px;
+}
+
+.bonus__card-title {
+  font: 800 12px var(--font);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin: 0 0 18px;
+}
+
+.bonus__list {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.bonus__item {
+  display: flex;
+  gap: 12px;
+  font: 500 15px/1.42 var(--font);
+  color: #3a3d36;
+}
+
+.bonus__check {
+  color: var(--accent-ink);
+  font-weight: 800;
+  flex: none;
+}
+
+@media (max-width: 860px) {
+  .bonus {
+    padding: 30px 22px;
+    margin: 28px 0px 0px;
+  }
+
+  .bonus__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bonus__heading {
+    font-size: 25px;
+  }
+}

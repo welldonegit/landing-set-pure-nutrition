@@ -1,5 +1,4 @@
 import { SET_PRICE, TREAT_PRICE } from '../data/prices.js';
-import { payOn, payOff } from './button-styles.js';
 
 const PAY_NOTES = {
   cod: 'Менеджер передзвонить для підтвердження. Оплата при отриманні (накладений платіж).',
@@ -50,7 +49,7 @@ function initPayment(root) {
 
   const render = () => {
     buttons.forEach((btn) => {
-      btn.setAttribute('style', btn.dataset.method === method ? payOn : payOff);
+      btn.classList.toggle('is-active', btn.dataset.method === method);
     });
     note.textContent = PAY_NOTES[method];
   };

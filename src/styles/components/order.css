@@ -1,0 +1,282 @@
+.order__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+  margin-top: 26px;
+}
+
+/* ---- форма ---- */
+.order-form {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .05);
+}
+
+.order-form__header {
+  background: var(--ink);
+  color: var(--surface);
+  padding: 18px 26px;
+  font: 800 18px var(--font);
+}
+
+.order-form__body {
+  padding: 26px;
+}
+
+.field {
+  margin: 0 0 14px;
+}
+
+.field__label {
+  display: block;
+  font: 700 13px var(--font);
+  color: var(--ink-subtle);
+  margin-bottom: 6px;
+}
+
+.field__control {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font: 500 15px var(--font);
+  background: #fafaf8;
+}
+
+/* ---- спосіб оплати ---- */
+.pay {
+  display: flex;
+  gap: 10px;
+}
+
+.pay__btn {
+  flex: 1;
+  border: 1px solid var(--line);
+  background: #fafaf8;
+  font: 700 14px var(--font);
+  color: var(--ink-subtle);
+  padding: 13px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: .15s;
+}
+
+.pay__btn.is-active {
+  border: 2px solid var(--accent);
+  background: #f1f7e3;
+  font: 800 14px var(--font);
+  color: var(--ink);
+  padding: 12px 10px;
+}
+
+/* ---- апсел ---- */
+.upsell {
+  border: 2px solid var(--warn);
+  background: #fff6ee;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin: 18px 0;
+  cursor: pointer;
+}
+
+.upsell__image {
+  width: 66px;
+  height: 66px;
+  border-radius: 12px;
+  object-fit: contain;
+  background: var(--surface);
+  flex: none;
+}
+
+.upsell__title {
+  font: 800 15px var(--font);
+}
+
+.upsell__text {
+  font: 500 14px var(--font);
+  color: var(--ink-muted);
+}
+
+.upsell__price {
+  color: var(--warn);
+}
+
+.upsell__knob {
+  margin-left: auto;
+  width: 54px;
+  height: 32px;
+  border-radius: 99px;
+  position: relative;
+  flex: none;
+}
+
+.upsell__knob--on {
+  background: var(--accent);
+}
+
+/* Початковий стан: апсел увімкнено, тому вимкнений тумблер прихований.
+   Далі видимістю керує order-summary.js. */
+.upsell__knob--off {
+  background: #d6d5cd;
+  display: none;
+}
+
+.upsell__dot {
+  position: absolute;
+  top: 3px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--surface);
+}
+
+.upsell__dot--right {
+  right: 3px;
+}
+
+.upsell__dot--left {
+  left: 3px;
+}
+
+/* ---- підсумок ---- */
+.order-form__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font: 900 24px var(--font);
+  letter-spacing: -.02em;
+  margin: 20px 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.order-form__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: var(--accent);
+  color: var(--ink);
+  text-decoration: none;
+  font: 800 18px var(--font);
+  padding: 16px;
+  border-radius: 99px;
+}
+
+.order-form__submit-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--surface);
+  font-size: 18px;
+}
+
+.order-form__note {
+  font: 500 12px var(--font);
+  color: var(--ink-subtle);
+  text-align: center;
+  margin: 14px 0 0;
+}
+
+/* ---- що ви отримуєте ---- */
+.value {
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px;
+}
+
+.value__title {
+  font: 800 22px var(--font);
+  margin: 0;
+}
+
+.value__list {
+  margin-top: 14px;
+}
+
+.value__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.value__row--divided {
+  border-bottom: 1px dashed var(--line);
+}
+
+.value__label {
+  font: 500 15px var(--font);
+}
+
+.value__amount--old {
+  font: 700 14px var(--font);
+  color: var(--ink-subtle);
+  text-decoration: line-through;
+  white-space: nowrap;
+}
+
+.value__amount--add {
+  font: 700 14px var(--font);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.value__amount--free {
+  font: 800 14px var(--font);
+  color: #8fb822;
+  white-space: nowrap;
+}
+
+.value__amount--shipping {
+  font: 700 13px var(--font);
+  color: var(--ink-subtle);
+  white-space: nowrap;
+}
+
+.value__amount--check {
+  font: 800 14px var(--font);
+  color: #8fb822;
+}
+
+.value__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.value__total-label {
+  font: 700 15px var(--font);
+}
+
+.value__total-amount {
+  font: 900 28px var(--font);
+  letter-spacing: -.02em;
+}
+
+.value__note {
+  font: 500 12px/1.5 var(--font);
+  color: var(--ink-subtle);
+  margin: 10px 0 0;
+}
+
+@media (max-width: 860px) {
+  .order__grid {
+    grid-template-columns: 1fr;
+  }
+}

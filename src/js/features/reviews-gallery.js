@@ -1,9 +1,5 @@
 import { REVIEWS } from '../data/reviews.js';
 
-const TILE_STYLE =
-  'padding:0;border:1px solid #ebeae3;border-radius:10px;overflow:hidden;background:#faf9f5;cursor:pointer;display:block;scroll-snap-align:start';
-const TILE_IMG_STYLE = 'width:100%;height:100%;object-fit:cover;display:block';
-
 /** Мобільна мозаїка скріншотів + повноекранна галерея. */
 export function initReviewsGallery(root = document) {
   const grid = root.querySelector('[data-js="reviews-grid"]');
@@ -29,14 +25,14 @@ export function initReviewsGallery(root = document) {
   REVIEWS.forEach((src, i) => {
     const tile = document.createElement('button');
     tile.type = 'button';
+    tile.className = 'reviews__tile';
     tile.setAttribute('aria-label', 'Відкрити відгук');
-    tile.setAttribute('style', TILE_STYLE);
 
     const img = document.createElement('img');
+    img.className = 'reviews__tile-image';
     img.src = src;
     img.alt = 'Відгук клієнта Pure Nutrition';
     img.loading = 'lazy';
-    img.setAttribute('style', TILE_IMG_STYLE);
 
     tile.append(img);
     tile.addEventListener('click', () => show(i));

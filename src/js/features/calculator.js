@@ -1,6 +1,5 @@
 import { PRICE, REG_OFF, formatPrice, packSizes } from '../data/prices.js';
 import { dailyGrams, lineForWeight } from '../data/feeding.js';
-import { flavorBtn } from './button-styles.js';
 
 const FLAVORS = ['beef', 'turkey', 'salmon'];
 const DAYS_PER_MONTH = 30;
@@ -61,7 +60,7 @@ export function initCalculator(root = document) {
     for (const f of FLAVORS) {
       root
         .querySelector(`[data-js="calc-flavor"][data-flavor="${f}"]`)
-        ?.setAttribute('style', flavorBtn(f === flavor));
+        ?.classList.toggle('is-active', f === flavor);
     }
   };
 
