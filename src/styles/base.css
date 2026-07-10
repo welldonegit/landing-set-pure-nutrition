@@ -1,3 +1,17 @@
+html {
+  /* Плавний перехід за якірними кнопками (#order тощо). */
+  scroll-behavior: smooth;
+  /* Ціль зупиняється нижче липкої шапки, а не впритул під нею. */
+  scroll-padding-top: 90px;
+}
+
+/* Поважаємо системне «зменшити рух»: комусь плавний скрол шкодить. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   margin: 0;
   font-family: 'Montserrat', -apple-system, Arial, sans-serif;

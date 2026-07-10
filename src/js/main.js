@@ -12,6 +12,7 @@ import { initPaymentMethod } from './features/payment-method.js';
 import { initCalculator } from './features/calculator.js';
 import { initPriceTable } from './features/price-table.js';
 import { initOrderForm } from './form/order-form.js';
+import { initStickyCta } from './features/sticky-cta.js';
 import { captureUtm } from './utils/utm.js';
 
 // До будь-якого рендеру: людина може прийти з реклами й піти на іншу сторінку,
@@ -30,3 +31,4 @@ initPaymentMethod();
 initCalculator();
 initPriceTable();
 initOrderForm();
+initStickyCta();

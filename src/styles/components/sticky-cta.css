@@ -1,0 +1,64 @@
+/* Кнопка, що закріплюється внизу екрана після першого екрана.
+   Керується з sticky-cta.js: клас is-visible з'являється, коли герой
+   прокручено, і зникає, коли видно саму форму замовлення. */
+.sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, rgba(21, 20, 15, .1), rgba(21, 20, 15, 0));
+  pointer-events: none;
+
+  /* Прихований стан: трохи нижче й прозорий. */
+  opacity: 0;
+  transform: translateY(12px);
+  visibility: hidden;
+  transition: opacity .25s ease, transform .25s ease, visibility .25s;
+}
+
+.sticky-cta.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.sticky-cta__btn {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--accent);
+  color: var(--ink);
+  text-decoration: none;
+  font: 800 17px var(--font);
+  padding: 12px 12px 12px 26px;
+  border-radius: 99px;
+  box-shadow: 0 10px 30px rgba(21, 20, 15, .22);
+}
+
+.sticky-cta__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--surface);
+  font-size: 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticky-cta {
+    transition: opacity .25s ease, visibility .25s;
+    transform: none;
+  }
+
+  .sticky-cta.is-visible {
+    transform: none;
+  }
+}
