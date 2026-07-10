@@ -1,4 +1,4 @@
-import { phoneProblem } from '../utils/phone.js';
+import { phoneProblem } from './phone.js';
 
 /**
  * Правила валідації замовлення. Чисті функції, без DOM.

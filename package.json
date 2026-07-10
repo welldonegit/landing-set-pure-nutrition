@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite --host 0.0.0.0",
+    "dev": "concurrently -n api,web -c blue,green \"npm:dev:server\" \"npm:dev:frontend\"",
+    "dev:frontend": "vite --host 0.0.0.0",
+    "dev:server": "node --watch server/index.js",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0"
   },
@@ -21,6 +23,10 @@
   "homepage": "https://github.com/welldonegit/landing-set-pure-nutrition#readme",
   "description": "",
   "devDependencies": {
+    "concurrently": "^10.0.3",
     "vite": "^8.1.4"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }

@@ -1,4 +1,4 @@
-import { maskAfterInput } from '../utils/phone.js';
+import { maskAfterInput } from '../../../shared/phone.js';
 
 const DELETE_TYPES = ['deleteContentBackward', 'deleteContentForward'];
 

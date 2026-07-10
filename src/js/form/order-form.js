@@ -1,7 +1,7 @@
-import { validateOrder, VALIDATED_FIELDS } from './validate.js';
-import { submitOrder } from './submit.js';
+import { validateOrder, VALIDATED_FIELDS } from '../../../shared/order-validation.js';
+import { submitOrder, ValidationError } from './submit.js';
 import { initPhoneMask } from './phone-mask.js';
-import { normalizePhone } from '../utils/phone.js';
+import { normalizePhone } from '../../../shared/phone.js';
 import { qs } from '../utils/dom.js';
 
 const FIELDS = [...VALIDATED_FIELDS, 'size'];
@@ -37,6 +37,7 @@ export function initOrderForm(root = document) {
   if (!form) return;
 
   const statusEl = qs('order-status', form);
+  const submitButton = form.querySelector('[type="submit"]');
   initPhoneMask(form.elements.phone);
 
   // Помилка зникає, щойно користувач починає виправляти поле.
@@ -66,11 +67,25 @@ export function initOrderForm(root = document) {
     // Далі йде вже нормалізований номер, а не те, що показувала маска.
     const data = { ...values, phone: normalizePhone(values.phone) };
 
+    // Захист від подвійного надсилання, поки триває запит.
+    if (submitButton) submitButton.disabled = true;
+    setStatus(statusEl, null);
+
     try {
       await submitOrder(data);
+      // Успіх показуємо тільки тоді, коли заявку справді доставлено.
       setStatus(statusEl, 'Замовлення прийнято.', 'success');
     } catch (error) {
+      // Сервер перевіряє дані ще раз і може відхилити те, що браузер пропустив.
+      if (error instanceof ValidationError) {
+        for (const [field, message] of Object.entries(error.errors)) {
+          if (VALIDATED_FIELDS.includes(field)) setFieldError(form, field, message);
+        }
+        form.elements[VALIDATED_FIELDS.find((f) => error.errors[f])]?.focus();
+      }
       setStatus(statusEl, error.message, 'error');
+    } finally {
+      if (submitButton) submitButton.disabled = false;
     }
   });
 }

@@ -9,6 +9,14 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
+    // Форма ходить на відносний /api/leads. У dev його обслуговує
+    // окремий Express на 3001; у продакшені обидва за одним доменом.
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     outDir: 'dist',
