@@ -6,6 +6,8 @@
  * на сервері, разом зі своїми токенами. Усе, що потрапляє в клієнтський
  * бандл, видно будь-кому у вкладці «Мережа» браузера.
  */
+import { getUtm } from '../utils/utm.js';
+
 const ENDPOINT = '/api/leads';
 
 /** Сервер відхилив дані. `errors` — повідомлення за полями. */
@@ -17,13 +19,22 @@ export class ValidationError extends Error {
   }
 }
 
-/** Заявку прийнято, але доставляти її поки нікуди. */
+/**
+ * Дані прийнято, але доставити заявку не вдалося: канал не налаштований
+ * або відмовив. Причину сервер назовні не розкриває.
+ */
 export class DeliveryNotConnectedError extends Error {
   constructor(message) {
     super(message || 'Надсилання замовлень ще не підключено. Зателефонуйте нам, будь ласка.');
     this.name = 'DeliveryNotConnectedError';
   }
 }
+
+/** Коди, за яких заявка не доїхала до менеджера. */
+const DELIVERY_FAILURE_CODES = new Set([
+  'TELEGRAM_NOT_CONFIGURED',
+  'TELEGRAM_SEND_FAILED',
+]);
 
 /** До сервера не достукались: немає мережі, він лежить або віддав щось дивне. */
 export class NetworkError extends Error {
@@ -44,15 +55,18 @@ const parseJson = async (response) => {
 /**
  * @param {{name: string, phone: string, email: string, branch: string, size: string}} order
  *        phone уже нормалізований: +380XXXXXXXXX
- * @returns {Promise<void>} — успішно завершується, лише якщо заявку доставлено
+ * @returns {Promise<object>} — тіло відповіді, лише якщо заявку справді доставлено
  */
 export async function submitOrder(order) {
+  // Мітки з поточної адреси або збережені з першого візиту.
+  const payload = { ...order, utm: getUtm() };
+
   let response;
   try {
     response = await fetch(ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(order),
+      body: JSON.stringify(payload),
     });
   } catch {
     throw new NetworkError();
@@ -60,14 +74,20 @@ export async function submitOrder(order) {
 
   const body = await parseJson(response);
 
-  if (response.ok) return;
+  // Успіх — це не просто 2xx, а явне ok: true від бекенда. Поки доставки
+  // немає, сюди не потрапити взагалі: сервер відповідає 503.
+  if (response.ok && body?.ok === true) return body;
+
+  if (response.ok) {
+    throw new NetworkError('Сервер відповів неочікувано. Спробуйте, будь ласка, пізніше.');
+  }
 
   if (response.status === 400 && body?.code === 'VALIDATION_ERROR') {
     throw new ValidationError(body.errors, body.message);
   }
 
-  if (body?.code === 'DELIVERY_NOT_CONNECTED') {
-    throw new DeliveryNotConnectedError(body.message);
+  if (response.status === 503 || DELIVERY_FAILURE_CODES.has(body?.code)) {
+    throw new DeliveryNotConnectedError(body?.message);
   }
 
   throw new NetworkError(

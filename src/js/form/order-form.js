@@ -6,6 +6,9 @@ import { qs } from '../utils/dom.js';
 
 const FIELDS = [...VALIDATED_FIELDS, 'size'];
 
+/** Сторінка подяки. Відкривається лише після реальної доставки заявки. */
+const THANKS_URL = '/thanks/';
+
 /** Показ або приховування помилки під конкретним полем. */
 function setFieldError(form, field, message) {
   const input = form.elements[field];
@@ -73,8 +76,10 @@ export function initOrderForm(root = document) {
 
     try {
       await submitOrder(data);
-      // Успіх показуємо тільки тоді, коли заявку справді доставлено.
-      setStatus(statusEl, 'Замовлення прийнято.', 'success');
+      // Сюди можна дійти лише при ok: true від бекенда. Поки доставки немає,
+      // submitOrder завжди кидає помилку, і редиректу не буде.
+      window.location.assign(THANKS_URL);
+      return;
     } catch (error) {
       // Сервер перевіряє дані ще раз і може відхилити те, що браузер пропустив.
       if (error instanceof ValidationError) {

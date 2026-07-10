@@ -1,7 +1,11 @@
 import { Router } from 'express';
 
 import { validateLead } from '../validation/lead-validation.js';
-import { deliverLead, DeliveryNotConnectedError } from '../services/lead-service.js';
+import {
+  deliverLead,
+  TelegramNotConfiguredError,
+  TelegramSendFailedError,
+} from '../services/lead-service.js';
 import { leadsRateLimit } from '../middleware/rate-limit.js';
 import { logApiEvent } from '../logger.js';
 
@@ -26,25 +30,38 @@ leadsRouter.post('/leads', leadsRateLimit, async (req, res) => {
     });
   }
 
+  // У логах лише назви наявних міток, не їхні значення.
+  const utmFields = Object.keys(lead.utm ?? {});
+
   try {
     await deliverLead(lead);
-    logApiEvent('info', req, 'lead_delivered', { status: 201, code: 'ACCEPTED' });
-    return res.status(201).json({ ok: true, code: 'ACCEPTED' });
-  } catch (error) {
-    if (error instanceof DeliveryNotConnectedError) {
-      // 503, а не 200: заявка нікуди не доїхала. Відповідь 200 змусила б
-      // моніторинг і логи вважати запит успішним.
-      logApiEvent('warn', req, 'delivery_not_connected', {
-        status: 503,
-        code: error.code,
-      });
 
-      return res.status(503).json({
-        ok: false,
-        code: error.code,
-        message: error.message,
-      });
-    }
-    throw error;
+    logApiEvent('info', req, 'lead_delivered', {
+      status: 201,
+      code: 'LEAD_DELIVERED',
+      utm: utmFields,
+    });
+
+    return res.status(201).json({ ok: true, code: 'LEAD_DELIVERED' });
+  } catch (error) {
+    const isNotConfigured = error instanceof TelegramNotConfiguredError;
+    const isSendFailed = error instanceof TelegramSendFailedError;
+    if (!isNotConfigured && !isSendFailed) throw error;
+
+    // 503, а не 200: заявка нікуди не доїхала. Відповідь 200 змусила б
+    // моніторинг і логи вважати запит успішним.
+    logApiEvent('error', req, isNotConfigured ? 'telegram_not_configured' : 'telegram_send_failed', {
+      status: 503,
+      code: error.code,
+      // reason технічний і не містить ані токена, ані даних клієнта
+      ...(isSendFailed ? { reason: error.reason } : {}),
+      utm: utmFields,
+    });
+
+    return res.status(503).json({
+      ok: false,
+      code: error.code,
+      message: error.message,
+    });
   }
 });

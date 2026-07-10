@@ -12,6 +12,11 @@ import { initPaymentMethod } from './features/payment-method.js';
 import { initCalculator } from './features/calculator.js';
 import { initPriceTable } from './features/price-table.js';
 import { initOrderForm } from './form/order-form.js';
+import { captureUtm } from './utils/utm.js';
+
+// До будь-якого рендеру: людина може прийти з реклами й піти на іншу сторінку,
+// а заявку залишити пізніше — мітки мають пережити цей шлях.
+captureUtm();
 
 // Кожен init самостійно перевіряє наявність своєї розмітки і мовчки
 // виходить, якщо її немає. Порядок викликів не має значення.

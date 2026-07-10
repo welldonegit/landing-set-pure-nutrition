@@ -1,3 +1,6 @@
+// Найперший імпорт: підвантажує .env до того, як інші модулі прочитають оточення.
+import { config } from './config/env.js';
+
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -6,8 +9,8 @@ import express from 'express';
 import { leadsRouter } from './routes/leads.js';
 import { requestContext, logApiEvent } from './logger.js';
 
-const PORT = Number(process.env.PORT) || 3001;
-const NODE_ENV = process.env.NODE_ENV || 'development';
+const PORT = config.port;
+const NODE_ENV = config.nodeEnv;
 const IS_PRODUCTION = NODE_ENV === 'production';
 
 const JSON_LIMIT = '10kb';
@@ -75,4 +78,12 @@ export function createServer() {
 createServer().listen(PORT, () => {
   console.info(`[api] ${NODE_ENV}: слухає http://localhost:${PORT}`);
   if (IS_PRODUCTION) console.info(`[api] статика з ${DIST}`);
+
+  // Тільки булеві прапорці: ані токен, ані chat_id у лог не потрапляють.
+  console.info(
+    `[api] ${JSON.stringify({
+      telegramTokenConfigured: config.telegram.tokenConfigured,
+      telegramChatConfigured: config.telegram.chatConfigured,
+    })}`,
+  );
 });
