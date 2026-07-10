@@ -141,3 +141,7 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Резервне сховище заявок — містить персональні дані, у git не потрапляє
+server/storage/*.jsonl
+server/storage/*.log
