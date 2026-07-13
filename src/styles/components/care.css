@@ -1,0 +1,167 @@
+.care {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding: 84px 0;
+  overflow: hidden;
+}
+
+.care__grid {
+  display: grid;
+  grid-template-columns: 0.86fr 1.14fr;
+  gap: 64px;
+  align-items: start;
+}
+
+/* Ліва колонка їде разом зі скролом; на вузьких екранах — ні,
+   інакше миска перекриває список праворуч. */
+.care__aside {
+  position: sticky;
+  top: 96px;
+}
+
+.care__eyebrow {
+  font: 700 13px var(--font);
+  letter-spacing: .04em;
+  color: var(--ink-faint);
+}
+
+.care__title {
+  font: 800 42px/1.1 var(--font);
+  letter-spacing: -.015em;
+  margin: 18px 0 0;
+}
+
+.care__highlight {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.care__scribble {
+  position: absolute;
+  left: -8%;
+  top: -16%;
+  width: 116%;
+  height: 140%;
+  overflow: visible;
+  z-index: -1;
+}
+
+.care__divider {
+  height: 1px;
+  background: var(--line);
+}
+
+/* ---- анімована миска: сирі інгредієнти ⇄ готовий корм ---- */
+.bowl {
+  margin: 34px 0 0;
+  max-width: 340px;
+}
+
+.bowl__stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1/1;
+}
+
+.bowl__glow {
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, rgba(163, 206, 46, .18), rgba(163, 206, 46, 0) 62%);
+}
+
+.bowl__ring {
+  position: absolute;
+  inset: 0;
+  border: 2px dashed rgba(163, 206, 46, .55);
+  border-radius: 50%;
+  animation: pn-bowl-ring 6s ease-in-out infinite;
+}
+
+.bowl__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  will-change: opacity, transform;
+}
+
+.bowl__img--kibble {
+  animation: pn-bowl-kibble 6s ease-in-out infinite;
+}
+
+.bowl__img--raw {
+  animation: pn-bowl-raw 6s ease-in-out infinite;
+}
+
+.bowl__labels {
+  position: relative;
+  height: 22px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.bowl__label {
+  position: absolute;
+  inset: 0;
+  font: 700 13px var(--font);
+  letter-spacing: .03em;
+  color: var(--accent-ink);
+}
+
+.bowl__label--a {
+  animation: pn-label-a 6s ease-in-out infinite;
+}
+
+.bowl__label--b {
+  animation: pn-label-b 6s ease-in-out infinite;
+}
+
+/* ---- правий список ---- */
+.care-item {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 22px;
+  padding: 26px 0;
+}
+
+.care-item--first {
+  padding: 0 0 26px;
+}
+
+.care-item--last {
+  padding: 26px 0 0;
+}
+
+.care-item__icon {
+  margin-top: 4px;
+}
+
+.care-item__title {
+  font: 800 22px/1.2 var(--font);
+  letter-spacing: -.01em;
+  margin: 0 0 8px;
+}
+
+.care-item__text {
+  font: 500 16px/1.6 var(--font);
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .care__grid {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .care__aside {
+    position: static;
+  }
+
+  .care__title {
+    font-size: 27px;
+  }
+}

@@ -1,0 +1,159 @@
+/* Показ керується з JS (display: flex). */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(21, 20, 15, .55);
+  backdrop-filter: blur(3px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal__dialog {
+  background: var(--surface);
+  border-radius: 24px;
+  max-width: 680px;
+  width: 100%;
+  max-height: 88vh;
+  overflow: auto;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .35);
+}
+
+.modal__header {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 26px 28px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.modal__brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.modal__emoji {
+  flex: none;
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.modal__title {
+  font: 800 23px var(--font);
+  letter-spacing: -.01em;
+  margin: 0;
+}
+
+.modal__subtitle {
+  font: 600 13px var(--font);
+  color: var(--ink-subtle);
+  margin-top: 2px;
+}
+
+.modal__close {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  font: 700 18px var(--font);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal__body {
+  padding: 24px 28px 30px;
+}
+
+.modal__caption {
+  font: 700 11px var(--font);
+  color: var(--ink-faint);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.modal__ingredients {
+  font: 500 14.5px/1.65 var(--font);
+  color: var(--ink-nav);
+  margin: 8px 0 22px;
+}
+
+.modal__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.modal__card {
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.modal__card--wide {
+  grid-column: 1/-1;
+}
+
+.modal__card-caption {
+  font: 700 11px var(--font);
+  color: var(--ink-faint);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.modal__card-text {
+  font: 500 13.5px/1.55 var(--font);
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.modal__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.modal__stat {
+  flex: 1;
+  min-width: 200px;
+  background: #f1f7e3;
+  border: 1px solid #dcebbf;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.modal__stat-value {
+  font: 900 22px var(--font);
+  color: var(--accent-ink);
+  letter-spacing: -.01em;
+}
+
+.modal__stat-label {
+  font: 600 12px var(--font);
+  color: var(--ink-muted);
+  margin-top: 4px;
+}
+
+@media (max-width: 860px) {
+  .modal__grid {
+    grid-template-columns: 1fr;
+  }
+}

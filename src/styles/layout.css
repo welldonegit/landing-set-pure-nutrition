@@ -1,0 +1,81 @@
+/* Центрувальна обгортка секцій. */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* Вертикальні відступи та тло секцій. */
+.section {
+  padding: 76px 0;
+}
+
+.section--white {
+  background: var(--surface);
+}
+
+.section--sand {
+  background: var(--bg);
+}
+
+.section--bordered {
+  border-top: 1px solid var(--line);
+}
+
+/* Секція-смуга: кольоровий блок на всю ширину з бічними полями. */
+.band {
+  background: var(--bg);
+  padding: 0 40px 76px;
+}
+
+/* Дрібна капслок-мітка над заголовком секції. */
+.pill {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--ink);
+  font: 800 12px var(--font);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border-radius: 99px;
+}
+
+/* Спільна типографіка заголовків секцій. */
+.section-title {
+  font: 800 40px/1.1 var(--font);
+  letter-spacing: -.01em;
+  margin: 0;
+}
+
+.section-title--gap {
+  margin: 16px 0 0;
+}
+
+.section-lede {
+  font: 500 18px/1.55 var(--font);
+  color: var(--ink-muted);
+  max-width: 760px;
+  margin: 14px 0 0;
+}
+
+/* Виділення слова кольором усередині заголовка. */
+.text-accent {
+  color: var(--accent-ink);
+}
+
+/* Підсилення фрагмента основним кольором тексту. */
+.text-ink {
+  color: var(--ink);
+}
+
+@media (max-width: 860px) {
+  .container,
+  .band {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .section-title {
+    font-size: 26px;
+  }
+}

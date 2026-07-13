@@ -1,0 +1,29 @@
+/* Дизайн-токени: значення взяті з наявного макета, нічого не змінено. */
+:root {
+  /* Тло та поверхні */
+  --bg: #f6f5f0;
+  --surface: #fff;
+  --surface-muted: #faf9f5;
+
+  /* Текст */
+  --ink: #15140f;
+  --ink-nav: #3a3a34;
+  --ink-muted: #5c5f58;
+  --ink-subtle: #8a8d86;
+  --ink-faint: #a3a39a;
+
+  /* Лінії */
+  --line: #ebeae3;
+  --line-strong: #e6e5df;
+  --line-soft: #dad9d2;
+
+  /* Акценти */
+  --accent: #a3ce2e;
+  --accent-ink: #7aa516;
+  --warn: #ec7d2a;
+  --danger: #c0506a;
+  --star: #f5b301;
+
+  /* Типографіка */
+  --font: 'Montserrat';
+}

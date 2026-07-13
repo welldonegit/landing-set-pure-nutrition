@@ -1,0 +1,265 @@
+.calc__lede {
+  max-width: 720px;
+}
+
+.calc {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: stretch;
+  margin-top: 28px;
+}
+
+/* ---- ліва колонка: керування ---- */
+.calc__controls {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 32px;
+  box-shadow: 0 4px 16px rgba(21, 20, 15, .04);
+}
+
+.calc__label {
+  font: 800 18px var(--font);
+  color: var(--ink);
+  letter-spacing: -.01em;
+}
+
+.calc__label--spaced {
+  margin-bottom: 12px;
+}
+
+.calc__weight {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 6px 0 14px;
+}
+
+.calc__weight-value {
+  font: 900 52px var(--font);
+  letter-spacing: -.02em;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.calc__weight-unit {
+  font: 800 22px var(--font);
+  color: var(--ink-subtle);
+}
+
+.calc__slider {
+  width: 100%;
+  accent-color: var(--accent);
+  height: 6px;
+  cursor: pointer;
+}
+
+.calc__ticks {
+  display: flex;
+  justify-content: space-between;
+  font: 600 12px var(--font);
+  color: var(--ink-faint);
+  margin-top: 6px;
+}
+
+.calc__divider {
+  height: 1px;
+  background: var(--line);
+  margin: 24px 0;
+}
+
+.calc__flavors {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.calc__flavor {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  background: #fafaf8;
+  font: 700 15px var(--font);
+  color: var(--ink-muted);
+  padding: 14px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: .15s;
+}
+
+.calc__flavor.is-active {
+  border: 2px solid var(--accent);
+  background: #f1f7e3;
+  font: 800 15px var(--font);
+  color: var(--ink);
+  padding: 13px 16px;
+}
+
+.calc__flavor-emoji {
+  font-size: 20px;
+}
+
+/* ---- права колонка: результат ---- */
+.calc__result {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  border-radius: 22px;
+  padding: 32px;
+  color: var(--surface);
+}
+
+.calc__glow {
+  position: absolute;
+  top: -120px;
+  right: -90px;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(163, 206, 46, .20), rgba(163, 206, 46, 0) 68%);
+}
+
+.calc__result-content {
+  position: relative;
+}
+
+.calc__daily {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, .14);
+}
+
+.calc__daily-label {
+  font: 600 15px var(--font);
+  opacity: .85;
+}
+
+.calc__daily-value {
+  font: 800 22px var(--font);
+  color: var(--surface);
+  font-variant-numeric: tabular-nums;
+}
+
+.calc__figures {
+  margin: 22px 0 4px;
+}
+
+.calc__caption {
+  font: 600 12px var(--font);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  opacity: .7;
+}
+
+.calc__caption--spaced {
+  margin-top: 20px;
+}
+
+.calc__figure {
+  font: 900 40px var(--font);
+  letter-spacing: -.02em;
+  line-height: 1.05;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.calc__figure--gap {
+  margin-top: 8px;
+}
+
+.calc__figure-unit {
+  font-size: 22px;
+}
+
+.calc__cost-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.calc__pack {
+  font: 500 13px var(--font);
+  opacity: .7;
+  margin-top: 10px;
+}
+
+.calc__pack-value {
+  opacity: 1;
+}
+
+.calc__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.calc__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, .1);
+  border-radius: 99px;
+  padding: 8px 15px;
+  font: 700 13px var(--font);
+}
+
+.calc__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--accent);
+  color: var(--ink);
+  text-decoration: none;
+  font: 800 16px var(--font);
+  padding: 9px 9px 9px 26px;
+  border-radius: 99px;
+  margin-top: 28px;
+}
+
+.calc__cta-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--surface);
+  font-size: 19px;
+}
+
+.calc__disclaimer {
+  font: 500 13px/1.5 var(--font);
+  color: var(--ink-faint);
+  margin: 16px 0 0;
+  max-width: 760px;
+}
+
+@media (max-width: 860px) {
+  .calc {
+    grid-template-columns: 1fr;
+  }
+
+  .calc__controls,
+  .calc__result {
+    padding: 22px;
+  }
+
+  .calc__weight-value {
+    font-size: 38px;
+  }
+
+  .calc__figure {
+    font-size: 29px;
+  }
+}

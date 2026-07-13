@@ -1,0 +1,38 @@
+.site-footer {
+  background: var(--ink);
+  color: #bdbdb6;
+  padding: 40px 0;
+}
+
+.footer__inner {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+}
+
+.footer__logo {
+  height: 34px;
+  width: auto;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+.footer__text {
+  font: 500 14px var(--font);
+  margin: 12px 0 0;
+}
+
+.footer__contacts {
+  font: 600 15px/1.6 var(--font);
+}
+
+.footer__phone {
+  color: var(--surface);
+  text-decoration: none;
+}
+
+.footer__email {
+  color: #bdbdb6;
+}

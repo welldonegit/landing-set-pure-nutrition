@@ -1,0 +1,70 @@
+html {
+  /* Плавний перехід за якірними кнопками (#order тощо). */
+  scroll-behavior: smooth;
+  /* Ціль зупиняється нижче липкої шапки, а не впритул під нею. */
+  scroll-padding-top: 90px;
+}
+
+/* Поважаємо системне «зменшити рух»: комусь плавний скрол шкодить. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', -apple-system, Arial, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.55;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.page {
+  background: var(--bg);
+}
+
+@keyframes pn-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+
+@keyframes pn-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pn-bowl-raw {
+  0%, 34% { opacity: 1; transform: scale(1) rotate(0deg); }
+  48%, 86% { opacity: 0; transform: scale(.9) rotate(-6deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes pn-bowl-kibble {
+  0%, 34% { opacity: 0; transform: scale(.9) rotate(6deg); }
+  48%, 86% { opacity: 1; transform: scale(1) rotate(0deg); }
+  100% { opacity: 0; transform: scale(.9) rotate(6deg); }
+}
+
+@keyframes pn-bowl-ring {
+  0%, 38% { opacity: 0; transform: scale(.72) rotate(0deg); }
+  43% { opacity: .9; }
+  53%, 81% { opacity: 0; }
+  57% { opacity: .9; transform: scale(1.08) rotate(80deg); }
+  88% { opacity: 0; transform: scale(.72) rotate(120deg); }
+  100% { opacity: 0; }
+}
+
+@keyframes pn-label-a {
+  0%, 38% { opacity: 1; }
+  48%, 100% { opacity: 0; }
+}
+
+@keyframes pn-label-b {
+  0%, 40% { opacity: 0; }
+  50%, 90% { opacity: 1; }
+  100% { opacity: 0; }
+}
