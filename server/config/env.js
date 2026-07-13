@@ -21,8 +21,13 @@ import 'dotenv/config';
 const read = (name) => (process.env[name] ?? '').trim();
 
 export const config = {
-  port: Number(process.env.PORT || 3001),
+  port: Number(process.env.PORT || 3000),
   nodeEnv: process.env.NODE_ENV || 'development',
+
+  // trust proxy вимкнено за замовчуванням. За зворотним проксі (Hostinger)
+  // вмикається керовано: TRUST_PROXY=1 (кількість проксі) або, напр., 'loopback'.
+  // Без цього express-rate-limit рахував би всіх за одним IP проксі.
+  trustProxy: read('TRUST_PROXY'),
 
   telegram: {
     botToken: read('TELEGRAM_BOT_TOKEN'),

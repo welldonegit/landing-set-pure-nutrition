@@ -2,6 +2,7 @@
 import { config } from './config/env.js';
 
 import path from 'node:path';
+import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import express from 'express';
@@ -14,14 +15,24 @@ const PORT = config.port;
 const NODE_ENV = config.nodeEnv;
 const IS_PRODUCTION = NODE_ENV === 'production';
 
+const HOST = '0.0.0.0';
 const JSON_LIMIT = '10kb';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
+const DIST_INDEX = path.join(DIST, 'index.html');
 
 export function createServer() {
   const app = express();
 
   app.disable('x-powered-by');
+
+  // trust proxy лише коли явно задано через TRUST_PROXY (не вслiпу).
+  if (config.trustProxy) {
+    const raw = config.trustProxy;
+    // число -> кількість проксі; інакше рядок (напр. 'loopback') як є.
+    app.set('trust proxy', /^\d+$/.test(raw) ? Number(raw) : raw);
+  }
+
   app.use(requestContext);
   app.use(express.json({ limit: JSON_LIMIT }));
 
@@ -77,8 +88,17 @@ export function createServer() {
   return app;
 }
 
-createServer().listen(PORT, () => {
-  console.info(`[api] ${NODE_ENV}: слухає http://localhost:${PORT}`);
+// У production фронтенд віддає сам Express. Якщо збірки немає — падаємо
+// з чіткою помилкою, а не піднімаємо сайт, що віддає 404 на кожну сторінку.
+if (IS_PRODUCTION && !existsSync(DIST_INDEX)) {
+  console.error(
+    `[api] fatal: не знайдено ${DIST_INDEX}. Спершу виконайте "npm run build".`,
+  );
+  process.exit(1);
+}
+
+const server = createServer().listen(PORT, HOST, () => {
+  console.info(`[api] ${NODE_ENV}: слухає http://${HOST}:${PORT}`);
   if (IS_PRODUCTION) console.info(`[api] статика з ${DIST}`);
 
   // Тільки булеві прапорці: ані токен, ані chat_id у лог не потрапляють.
@@ -89,3 +109,17 @@ createServer().listen(PORT, () => {
     })}`,
   );
 });
+
+// Коректне завершення: Hostinger шле SIGTERM при рестарті/деплої.
+function shutdown(signal) {
+  console.info(`[api] ${signal}: закриваю сервер…`);
+  server.close(() => {
+    console.info('[api] сервер зупинено');
+    process.exit(0);
+  });
+  // Аварійний вихід, якщо з'єднання не закрилися вчасно.
+  setTimeout(() => process.exit(1), 10_000).unref();
+}
+
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));

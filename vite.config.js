@@ -57,10 +57,10 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     // Форма ходить на відносний /api/leads. У dev його обслуговує
-    // окремий Express на 3001; у продакшені обидва за одним доменом.
+    // окремий Express на 3000; у продакшені обидва за одним доменом.
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3000',
         changeOrigin: true,
       },
     },
