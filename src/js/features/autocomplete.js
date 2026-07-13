@@ -7,7 +7,6 @@
  * зміни тексту раніше обраний елемент скидається.
  */
 
-const MIN_CHARS = 2;
 const DEBOUNCE_MS = 300;
 
 /**
@@ -17,9 +16,19 @@ const DEBOUNCE_MS = 300;
  * @param {(query:string, signal:AbortSignal)=>Promise<Array>} opts.search
  * @param {(item:object)=>string} opts.render  текст пункту
  * @param {(item:object|null)=>void} opts.onSelect  item=null означає скидання вибору
+ * @param {number} [opts.minChars=2]     від скількох символів починати пошук
+ * @param {boolean} [opts.searchOnFocus] показувати список одразу при фокусі (порожній запит)
  * @returns {{ reset: ()=>void, setEnabled: (on:boolean)=>void }}
  */
-export function createAutocomplete({ input, list, search, render, onSelect }) {
+export function createAutocomplete({
+  input,
+  list,
+  search,
+  render,
+  onSelect,
+  minChars = 2,
+  searchOnFocus = false,
+}) {
   let items = [];
   let active = -1;
   let timer = null;
@@ -83,13 +92,21 @@ export function createAutocomplete({ input, list, search, render, onSelect }) {
     }
     clearTimeout(timer);
     const query = input.value.trim();
-    if (query.length < MIN_CHARS) {
+    // Порожній ввід при searchOnFocus — показуємо перелік (напр. відділення міста).
+    if (query.length < minChars && !(searchOnFocus && query.length === 0)) {
       controller?.abort();
       close();
       return;
     }
     timer = setTimeout(() => run(query), DEBOUNCE_MS);
   });
+
+  if (searchOnFocus) {
+    input.addEventListener('focus', () => {
+      if (input.disabled || selected) return;
+      if (input.value.trim().length < minChars) run('');
+    });
+  }
 
   input.addEventListener('keydown', (e) => {
     if (list.hidden || items.length === 0) return;

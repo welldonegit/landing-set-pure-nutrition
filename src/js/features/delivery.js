@@ -117,6 +117,10 @@ export function initDelivery(root = document) {
   warehouseAc = createAutocomplete({
     input: dom.warehouseInput,
     list: dom.warehouseList,
+    // Відділення/поштомат зручно шукати за номером — стартуємо вже з 1 символу,
+    // а при фокусі показуємо перелік точок міста без жодного вводу.
+    minChars: 1,
+    searchOnFocus: true,
     search: (q, signal) => fetchWarehouses({ cityRef: state.city?.ref, type: state.type, query: q }, signal),
     render: (w) => w.name,
     onSelect: (w) => {
