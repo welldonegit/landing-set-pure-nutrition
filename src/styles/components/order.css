@@ -109,6 +109,12 @@ select.field__control {
   padding: 10px 8px;
 }
 
+/* Відступ від поля міста до залежного поля (адреса/точка видачі).
+   Поле помилки між ними приховане, тож без цього вони злипаються. */
+.delivery__dep {
+  margin-top: 10px;
+}
+
 .delivery__dep[hidden] {
   display: none;
 }
