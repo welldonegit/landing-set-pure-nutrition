@@ -1,9 +1,30 @@
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import { defineConfig } from 'vite';
 
 const page = (relativePath) =>
   fileURLToPath(new URL(relativePath, import.meta.url));
+
+/**
+ * Спільні шматки розмітки (шапка, підвал) підставляються на етапі збірки
+ * та в dev: `<!--include:header-->` замінюється вмістом src/partials/header.html.
+ *
+ * Це build-time включення, тож на виході статичний HTML — без мигання й без
+ * залежності від JS. Нова сторінка підключає шапку одним коментарем.
+ */
+const htmlPartials = () => ({
+  name: 'html-partials',
+  transformIndexHtml: {
+    order: 'pre',
+    handler(html) {
+      return html.replace(/<!--\s*include:\s*([\w-]+)\s*-->/g, (_, name) => {
+        const file = page(`./src/partials/${name}.html`);
+        return readFileSync(file, 'utf8').trimEnd();
+      });
+    },
+  },
+});
 
 /**
  * У production express.static сам редиректить /thanks -> /thanks/.
@@ -23,7 +44,7 @@ const trailingSlashRedirect = () => ({
 });
 
 export default defineConfig({
-  plugins: [trailingSlashRedirect()],
+  plugins: [htmlPartials(), trailingSlashRedirect()],
   // Відносні шляхи в збірці — сторінка працює і з підкаталогу.
   base: './',
   // public/ копіюється в dist як є: зображення відгуків підставляються

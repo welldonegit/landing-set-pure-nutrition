@@ -25,23 +25,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="page">
 
 <!-- ============ NAV ============ -->
-<header class="site-header">
-  <div class="header__inner">
-    <div class="header__brand">
-      <img class="header__logo" src="images/logo.svg" alt="Pure Nutrition">
-      <div class="header__tagline">Сухий повнораціонний корм<br>преміум класу для собак</div>
-    </div>
-    <div class="header__actions">
-      <nav class="header__nav">
-        <a class="header__link" href="#flavors">Корми</a>
-        <a class="header__link" href="#benefits">Користь</a>
-        <a class="header__link" href="#reviews">Відгуки</a>
-        <a class="header__link" href="#order">Доставка</a>
-      </nav>
-      <a class="header__phone" href="tel:+380770775700">+38 (077) 077 57 00</a>
-    </div>
-  </div>
-</header>
+<!--include:header-->
 
 <!-- ============ 1. HERO ============ -->
 <section class="hero">
@@ -435,7 +419,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="field"><span class="field__label">Спосіб оплати</span>
             <div class="pay">
               <button type="button" class="pay__btn is-active" data-js="pay-method" data-method="cod">Накладений платіж</button>
-              <button type="button" class="pay__btn" data-js="pay-method" data-method="online">Онлайн оплата</button>
+              <!-- Онлайн-оплату тимчасово приховано — увімкнемо, коли підключимо провайдера. -->
+              <button type="button" class="pay__btn" data-js="pay-method" data-method="online" hidden>Онлайн оплата</button>
             </div>
           </div>
 
@@ -574,15 +559,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============ FOOTER ============ -->
-<footer class="site-footer">
-  <div class="container footer__inner">
-    <div>
-      <img class="footer__logo" src="images/logo.svg" alt="Pure Nutrition">
-      <p class="footer__text">Сухий корм для собак • виробництво України</p>
-    </div>
-    <div class="footer__contacts"><a class="footer__phone" href="tel:+380770775700">+38 (077) 077 57 00</a><br><span class="footer__email">info@pure-nutrition.com.ua</span></div>
-  </div>
-</footer>
+<!--include:footer-->
 
 <!-- ============ STICKY CTA (зʼявляється після першого екрана) ============ -->
 <div class="sticky-cta" data-js="sticky-cta" hidden>
