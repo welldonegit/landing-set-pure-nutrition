@@ -10,8 +10,9 @@
     "dev": "concurrently -n api,web -c blue,green \"npm:dev:server\" \"npm:dev:frontend\"",
     "dev:frontend": "vite --host 0.0.0.0",
     "dev:server": "node --watch server/index.js",
-    "start": "node server/index.js",
+    "start": "node index.js",
     "build": "vite build",
+    "postinstall": "npm run build",
     "preview": "vite preview --host 0.0.0.0"
   },
   "repository": {
