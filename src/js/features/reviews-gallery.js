@@ -1,6 +1,9 @@
 import { REVIEWS } from '../data/reviews.js';
-import { qs } from '../utils/dom.js';
+import { qs, qsa } from '../utils/dom.js';
 import { createLightbox } from './lightbox.js';
+
+const REVIEW_ALT = 'Відгук клієнта Pure Nutrition';
+const REVIEW_ITEMS = REVIEWS.map((src) => ({ src, alt: REVIEW_ALT }));
 
 function buildTile(src, onOpen) {
   const tile = document.createElement('button');
@@ -11,7 +14,7 @@ function buildTile(src, onOpen) {
   const img = document.createElement('img');
   img.className = 'reviews__tile-image';
   img.src = src;
-  img.alt = 'Відгук клієнта Pure Nutrition';
+  img.alt = REVIEW_ALT;
   img.loading = 'lazy';
 
   tile.append(img);
@@ -25,7 +28,12 @@ export function initReviewsGallery(root = document) {
   const lightbox = createLightbox(root);
   if (!grid || !lightbox) return;
 
+  // Лічильник у підказці «… N відгуків» — саме відгуки, не спільна галерея.
+  qsa('reviews-count', root).forEach((el) => {
+    el.textContent = String(REVIEWS.length);
+  });
+
   grid.append(
-    ...REVIEWS.map((src, i) => buildTile(src, () => lightbox.open(i))),
+    ...REVIEWS.map((src, i) => buildTile(src, () => lightbox.open(REVIEW_ITEMS, i))),
   );
 }
