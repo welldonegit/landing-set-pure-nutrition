@@ -2,6 +2,7 @@ import { validateOrder, VALIDATED_FIELDS } from '../../../shared/order-validatio
 import { submitOrder, ValidationError } from './submit.js';
 import { initPhoneMask } from './phone-mask.js';
 import { normalizePhone } from '../../../shared/phone.js';
+import { isUpsellEnabled } from '../features/upsell.js';
 import { qs } from '../utils/dom.js';
 
 const FIELDS = [...VALIDATED_FIELDS, 'size'];
@@ -68,7 +69,11 @@ export function initOrderForm(root = document) {
     }
 
     // Далі йде вже нормалізований номер, а не те, що показувала маска.
-    const data = { ...values, phone: normalizePhone(values.phone) };
+    const data = {
+      ...values,
+      phone: normalizePhone(values.phone),
+      upsell: isUpsellEnabled(),
+    };
 
     // Захист від подвійного надсилання, поки триває запит.
     if (submitButton) submitButton.disabled = true;

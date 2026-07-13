@@ -1,6 +1,7 @@
 import { validateOrder, VALIDATED_FIELDS } from '../../shared/order-validation.js';
 import { normalizePhone } from '../../shared/phone.js';
 import { UTM_FIELDS, UTM_MAX_LENGTH } from '../../shared/utm.js';
+import { productForSize } from '../config/products.js';
 
 /**
  * Серверна перевірка заявки.
@@ -11,7 +12,7 @@ import { UTM_FIELDS, UTM_MAX_LENGTH } from '../../shared/utm.js';
  */
 
 const TEXT_FIELDS = [...VALIDATED_FIELDS, 'size'];
-const ALLOWED_FIELDS = [...TEXT_FIELDS, 'utm'];
+const ALLOWED_FIELDS = [...TEXT_FIELDS, 'utm', 'upsell'];
 const MAX_FIELD_LENGTH = 200;
 
 const isPlainObject = (value) =>
@@ -85,6 +86,16 @@ export function validateLead(payload) {
     values[field] = raw.trim();
   }
 
+  // size має точно збігатися з позицією каталогу — інакше нема що замовляти.
+  if (values.size !== undefined && !productForSize(values.size)) {
+    errors.size = 'Оберіть розмір собаки зі списку';
+  }
+
+  // upsell необов'язковий; приймаємо лише булеве значення.
+  if (payload.upsell !== undefined && typeof payload.upsell !== 'boolean') {
+    errors.upsell = 'Очікується true або false';
+  }
+
   const utm = validateUtm(payload.utm, errors);
 
   if (Object.keys(errors).length > 0) return { valid: false, errors };
@@ -97,6 +108,11 @@ export function validateLead(payload) {
     valid: true,
     errors: {},
     // Телефон зберігаємо в канонічному вигляді, хай там що надіслав клієнт.
-    lead: { ...values, phone: normalizePhone(values.phone), utm },
+    lead: {
+      ...values,
+      phone: normalizePhone(values.phone),
+      upsell: payload.upsell === true,
+      utm,
+    },
   };
 }

@@ -8,6 +8,8 @@ import {
   TelegramNotConfiguredError,
   TelegramSendFailedError,
 } from '../services/lead-service.js';
+import { createKeycrmOrder } from '../services/keycrm-service.js';
+import { productForSize } from '../config/products.js';
 import { saveLead, recordDelivery } from '../services/lead-storage.js';
 import { leadsRateLimit } from '../middleware/rate-limit.js';
 import { logApiEvent } from '../logger.js';
@@ -20,17 +22,45 @@ const clientIp = (req) => req.ip ?? req.socket?.remoteAddress ?? 'unknown';
 const userAgent = (req) =>
   (req.get?.('user-agent') ?? '').slice(0, UA_MAX_LENGTH) || 'unknown';
 
-/** Наслідок доставки пишемо окремим рядком. Збій цього запису не має
- *  ламати вже виконане (заявка збережена й, можливо, доставлена). */
+/** Наслідок каналу пишемо окремим рядком JSONL. Збій цього запису не має
+ *  ламати вже виконане — ловимо окремо й логуємо storage_event_failed. */
 async function tryRecordDelivery(req, entry) {
   try {
     await recordDelivery(entry);
   } catch (error) {
+    // Поле навмисно НЕ 'event': воно перетерло б назву події логера.
     logApiEvent('warn', req, 'storage_event_failed', {
       leadId: entry.leadId,
-      event: entry.event,
+      failedEvent: entry.event,
       error: error?.code ?? error?.name ?? 'Error',
     });
+  }
+}
+
+/** KeyCRM-канал. Ніколи не кидає — повертає підсумок. */
+async function tryKeycrm(order) {
+  try {
+    const { duplicate } = await createKeycrmOrder(order);
+    return { ok: true, event: 'keycrm_created', reason: duplicate ? 'duplicate' : undefined };
+  } catch (error) {
+    return { ok: false, event: 'keycrm_failed', code: error.code, reason: error.reason ?? error.code };
+  }
+}
+
+/** Telegram-канал. Ніколи не кидає — повертає підсумок. */
+async function tryTelegram(order) {
+  try {
+    await deliverLead(order);
+    return { ok: true, event: 'telegram_sent' };
+  } catch (error) {
+    const notConfigured = error instanceof TelegramNotConfiguredError;
+    const known = notConfigured || error instanceof TelegramSendFailedError;
+    return {
+      ok: false,
+      event: 'telegram_failed',
+      code: known ? error.code : 'TELEGRAM_SEND_FAILED',
+      reason: notConfigured ? 'not_configured' : error.reason ?? 'error',
+    };
   }
 }
 
@@ -38,7 +68,6 @@ leadsRouter.post('/leads', leadsRateLimit, async (req, res) => {
   const { valid, errors, lead } = validateLead(req.body);
 
   if (!valid) {
-    // У лог іде тільки перелік проблемних полів, не їхній вміст.
     logApiEvent('warn', req, 'validation_failed', {
       status: 400,
       code: 'VALIDATION_ERROR',
@@ -55,12 +84,14 @@ leadsRouter.post('/leads', leadsRateLimit, async (req, res) => {
 
   const leadId = randomUUID();
   const createdAt = new Date().toISOString();
-  const { utm, ...leadFields } = lead;
+  const { utm, ...leadFields } = lead; // leadFields: name,phone,email,branch,size,upsell
   const utmFields = Object.keys(utm ?? {});
+  const sku = productForSize(leadFields.size)?.sku;
 
-  // ── 1. Спершу на диск, потім у Telegram ──────────────────────────────
-  // Якщо збереження впало — доставку навіть не пробуємо: інакше заявка
-  // могла б піти в Telegram, але не лишити сліду на сервері.
+  // Замовлення, яке йде в обидва канали. leadId -> source_uuid у KeyCRM.
+  const order = { leadId, ...leadFields, utm };
+
+  // ── 1. Резервний запис. Його збій НЕ блокує зовнішні канали ──────────
   try {
     await saveLead({
       leadId,
@@ -69,58 +100,48 @@ leadsRouter.post('/leads', leadsRateLimit, async (req, res) => {
       utm: utm ?? {},
       meta: { source: 'landing', ip: clientIp(req), userAgent: userAgent(req) },
     });
-
     logApiEvent('info', req, 'lead_saved', { leadId, utm: utmFields });
   } catch (error) {
     logApiEvent('error', req, 'lead_storage_failed', {
       leadId,
-      status: 503,
       code: 'LEAD_STORAGE_FAILED',
       error: error?.code ?? error?.name ?? 'Error',
     });
-
-    return res.status(503).json({
-      ok: false,
-      code: 'LEAD_STORAGE_FAILED',
-      message: 'Не вдалося зберегти заявку. Зателефонуйте нам, будь ласка.',
-    });
   }
 
-  // ── 2. Доставка ──────────────────────────────────────────────────────
-  try {
-    await deliverLead({ ...leadFields, utm });
+  // ── 2. KeyCRM і Telegram незалежно й паралельно ──────────────────────
+  const [keycrm, telegram] = await Promise.allSettled([
+    tryKeycrm(order),
+    tryTelegram(order),
+  ]).then((settled) => settled.map((s) => s.value));
 
-    await tryRecordDelivery(req, { event: 'telegram_sent', leadId, createdAt });
-    logApiEvent('info', req, 'telegram_sent', {
-      leadId,
-      status: 201,
-      code: 'LEAD_DELIVERED',
-      utm: utmFields,
-    });
+  // ── 3. Записуємо наслідки та логуємо (без ПД) ────────────────────────
+  await tryRecordDelivery(req, { event: keycrm.event, leadId, createdAt, reason: keycrm.reason });
+  await tryRecordDelivery(req, { event: telegram.event, leadId, createdAt, reason: telegram.reason });
 
-    return res.status(201).json({ ok: true, code: 'LEAD_DELIVERED' });
-  } catch (error) {
-    const isNotConfigured = error instanceof TelegramNotConfiguredError;
-    const isSendFailed = error instanceof TelegramSendFailedError;
-    if (!isNotConfigured && !isSendFailed) throw error;
+  logApiEvent(keycrm.ok ? 'info' : 'warn', req, keycrm.event, {
+    leadId, sku, reason: keycrm.reason, code: keycrm.code,
+  });
+  logApiEvent(telegram.ok ? 'info' : 'warn', req, telegram.event, {
+    leadId, reason: telegram.reason, code: telegram.code, utm: utmFields,
+  });
 
-    const reason = isNotConfigured ? 'not_configured' : error.reason;
+  const channels = { keycrm: keycrm.ok, telegram: telegram.ok };
 
-    await tryRecordDelivery(req, { event: 'telegram_failed', leadId, createdAt, reason });
-
-    // Заявку збережено, тож вона не втрачена, навіть якщо Telegram лежить.
-    logApiEvent('warn', req, 'telegram_failed', {
-      leadId,
-      status: 503,
-      code: error.code,
-      reason,
-      utm: utmFields,
-    });
-
-    return res.status(503).json({
-      ok: false,
-      code: error.code,
-      message: error.message,
-    });
+  // ── 4. Успіх, якщо спрацював хоча б один канал ───────────────────────
+  if (keycrm.ok || telegram.ok) {
+    return res.status(201).json({ ok: true, code: 'LEAD_DELIVERED', channels });
   }
+
+  // Обидва канали впали. Заявка збережена в JSONL (якщо storage живий),
+  // тож не втрачена, але доставки не було.
+  logApiEvent('error', req, 'lead_delivery_failed', {
+    leadId, status: 503, code: 'DELIVERY_FAILED', channels,
+  });
+
+  return res.status(503).json({
+    ok: false,
+    code: 'DELIVERY_FAILED',
+    message: 'Не вдалося надіслати заявку. Зателефонуйте нам, будь ласка.',
+  });
 });

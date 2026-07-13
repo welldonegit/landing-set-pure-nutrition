@@ -32,4 +32,16 @@ export const config = {
     tokenConfigured: Boolean(read('TELEGRAM_BOT_TOKEN')),
     chatConfigured: Boolean(read('TELEGRAM_CHAT_ID')),
   },
+
+  keycrm: {
+    apiToken: read('KEYCRM_API_TOKEN'),
+    apiBase: read('KEYCRM_API_BASE') || 'https://openapi.keycrm.app',
+    // source_id у payload має бути числом.
+    sourceId: Number(read('KEYCRM_SOURCE_ID')),
+    // Налаштовано лише коли є токен і коректний числовий source_id.
+    configured:
+      Boolean(read('KEYCRM_API_TOKEN')) &&
+      read('KEYCRM_SOURCE_ID') !== '' &&
+      Number.isFinite(Number(read('KEYCRM_SOURCE_ID'))),
+  },
 };

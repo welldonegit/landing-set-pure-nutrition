@@ -1,6 +1,12 @@
 import { SET_PRICE, TREAT_PRICE } from '../data/prices.js';
 import { qs, qsa } from '../utils/dom.js';
 
+// Стан тумблера на рівні модуля, щоб форма могла його прочитати при відправленні.
+let enabled = true;
+
+/** Чи додав користувач смаколики. Читає order-form при зборі заявки. */
+export const isUpsellEnabled = () => enabled;
+
 /** Тумблер «додати смаколики»: перемикає видимість і перераховує підсумок. */
 export function initUpsell(root = document) {
   const card = qs('upsell', root);
@@ -9,8 +15,6 @@ export function initUpsell(root = document) {
   const line = qs('upsell-line', root);
   const totals = qsa('order-total', root);
   if (!card || !knobOn || !knobOff || !line) return;
-
-  let enabled = true;
 
   const render = () => {
     knobOn.style.display = enabled ? 'block' : 'none';
