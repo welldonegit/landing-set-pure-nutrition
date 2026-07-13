@@ -79,12 +79,39 @@
   align-items: center;
 }
 
-.cert-lab__slot {
+/* Область така сама, як була у слота (230px) — композиція блоку не змінюється. */
+.cert-lab__media {
+  position: relative;
   width: 100%;
   height: 230px;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--surface-muted);
+}
+
+.cert-lab__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
-  border: 1px dashed #d6d5cd;
-  background: var(--surface);
+}
+
+.cert-lab__zoom {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(21, 20, 15, .28);
 }
 
 @media (max-width: 860px) {

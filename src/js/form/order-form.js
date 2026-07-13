@@ -43,7 +43,20 @@ export function initOrderForm(root = document) {
 
   const statusEl = qs('order-status', form);
   const submitButton = form.querySelector('[type="submit"]');
+  const submitLabel = submitButton?.querySelector('.order-form__submit-label');
   initPhoneMask(form.elements.phone);
+
+  const SUBMIT_DEFAULT = 'Підтвердити замовлення';
+  const SUBMIT_LOADING = 'Надсилаємо...';
+
+  /** Стан завантаження кнопки: спінер, текст, aria-busy і блокування. */
+  const setSubmitLoading = (on) => {
+    if (!submitButton) return;
+    submitButton.disabled = on;
+    submitButton.classList.toggle('is-loading', on);
+    submitButton.setAttribute('aria-busy', on ? 'true' : 'false');
+    if (submitLabel) submitLabel.textContent = on ? SUBMIT_LOADING : SUBMIT_DEFAULT;
+  };
 
   // Помилка зникає, щойно користувач починає виправляти поле.
   for (const field of VALIDATED_FIELDS) {
@@ -80,14 +93,13 @@ export function initOrderForm(root = document) {
       delivery: getDelivery(),
     };
 
-    // Захист від подвійного надсилання, поки триває запит.
-    if (submitButton) submitButton.disabled = true;
+    // Блокуємо кнопку й показуємо спінер — захист від повторного надсилання.
+    setSubmitLoading(true);
     setStatus(statusEl, null);
 
     try {
       await submitOrder(data);
-      // Сюди можна дійти лише при ok: true від бекенда. Поки доставки немає,
-      // submitOrder завжди кидає помилку, і редиректу не буде.
+      // Успіх: лишаємо стан завантаження до редиректу, спінер не знімаємо.
       window.location.assign(THANKS_URL);
       return;
     } catch (error) {
@@ -99,8 +111,8 @@ export function initOrderForm(root = document) {
         form.elements[VALIDATED_FIELDS.find((f) => error.errors[f])]?.focus();
       }
       setStatus(statusEl, error.message, 'error');
-    } finally {
-      if (submitButton) submitButton.disabled = false;
+      // Повертаємо кнопку в норму лише після помилки.
+      setSubmitLoading(false);
     }
   });
 }
