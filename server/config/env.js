@@ -44,4 +44,10 @@ export const config = {
       read('KEYCRM_SOURCE_ID') !== '' &&
       Number.isFinite(Number(read('KEYCRM_SOURCE_ID'))),
   },
+
+  novaPoshta: {
+    apiKey: read('NOVA_POSHTA_API_KEY'),
+    apiBase: read('NOVA_POSHTA_API_BASE') || 'https://api.novaposhta.ua/v2.0/json/',
+    configured: Boolean(read('NOVA_POSHTA_API_KEY')),
+  },
 };

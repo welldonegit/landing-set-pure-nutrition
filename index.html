@@ -409,10 +409,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <label class="field__label" for="order-size">Розмір собаки</label>
             <select class="field__control" id="order-size" name="size"><option>Дрібна порода (сет 3×300 г)</option><option>Середня / велика порода (сет 3×300 г)</option></select>
           </div>
-          <div class="field">
-            <label class="field__label" for="order-branch">Відділення Нової Пошти</label>
-            <input class="field__control" id="order-branch" name="branch" placeholder="Місто, № відділення" aria-describedby="order-branch-error">
-            <span class="field__error" id="order-branch-error" data-js="error-branch" hidden></span>
+          <!-- delivery -->
+          <div class="field delivery" data-js="delivery">
+            <span class="field__label">Доставка Новою Поштою</span>
+            <div class="delivery__types">
+              <button type="button" class="delivery__type is-active" data-js="delivery-type" data-type="branch">На відділення</button>
+              <button type="button" class="delivery__type" data-js="delivery-type" data-type="postomat">На поштомат</button>
+              <button type="button" class="delivery__type" data-js="delivery-type" data-type="doors">До дверей</button>
+            </div>
+
+            <div class="ac">
+              <input class="field__control" data-js="delivery-city" placeholder="Оберіть місто" autocomplete="off" aria-label="Місто">
+              <ul class="ac__list" data-js="delivery-city-list" role="listbox" hidden></ul>
+            </div>
+            <span class="field__error" data-js="error-delivery.city" hidden></span>
+
+            <!-- doors: адреса -->
+            <div class="delivery__dep" data-js="delivery-address-field" hidden>
+              <input class="field__control" data-js="delivery-address" placeholder="Ваша адреса (вулиця, будинок, квартира)" autocomplete="off" aria-label="Адреса">
+              <span class="field__error" data-js="error-delivery.address" hidden></span>
+            </div>
+
+            <!-- branch/postomat: точка видачі -->
+            <div class="delivery__dep" data-js="delivery-warehouse-field">
+              <label class="field__label field__label--sub" data-js="delivery-warehouse-label">Оберіть відділення</label>
+              <div class="ac">
+                <input class="field__control" data-js="delivery-warehouse" placeholder="Відділення: номер або адреса" autocomplete="off" aria-label="Точка видачі">
+                <ul class="ac__list" data-js="delivery-warehouse-list" role="listbox" hidden></ul>
+              </div>
+              <span class="field__error" data-js="error-delivery.warehouse" hidden></span>
+            </div>
           </div>
 
           <!-- payment method -->

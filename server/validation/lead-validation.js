@@ -1,7 +1,50 @@
 import { validateOrder, VALIDATED_FIELDS } from '../../shared/order-validation.js';
 import { normalizePhone } from '../../shared/phone.js';
 import { UTM_FIELDS, UTM_MAX_LENGTH } from '../../shared/utm.js';
+import { validateDelivery, DELIVERY_TYPES } from '../../shared/delivery.js';
 import { productForSize } from '../config/products.js';
+
+const DELIVERY_ALLOWED = ['type', 'city', 'address', 'warehouse'];
+const CITY_ALLOWED = ['ref', 'name'];
+const WAREHOUSE_ALLOWED = ['ref', 'name', 'cityRef', 'number', 'shortAddress', 'type'];
+
+const isPlainObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
+
+/** Відкидаємо невідомі ключі всередині delivery — ознака підробленого payload. */
+function rejectUnknownDeliveryKeys(delivery, errors) {
+  if (!isPlainObj(delivery)) return;
+  for (const k of Object.keys(delivery)) {
+    if (!DELIVERY_ALLOWED.includes(k)) errors[`delivery.${k}`] = 'Невідоме поле';
+  }
+  if (isPlainObj(delivery.city)) {
+    for (const k of Object.keys(delivery.city)) {
+      if (!CITY_ALLOWED.includes(k)) errors[`delivery.city.${k}`] = 'Невідоме поле';
+    }
+  }
+  if (isPlainObj(delivery.warehouse)) {
+    for (const k of Object.keys(delivery.warehouse)) {
+      if (!WAREHOUSE_ALLOWED.includes(k)) errors[`delivery.warehouse.${k}`] = 'Невідоме поле';
+    }
+  }
+}
+
+/** Лишає в delivery тільки дозволені поля — те, що зберігаємо й шлемо в канали. */
+function cleanDelivery(delivery) {
+  const out = { type: delivery.type, city: { ref: delivery.city.ref, name: delivery.city.name } };
+  if (delivery.type === 'doors') {
+    out.address = delivery.address.trim();
+  } else {
+    const w = delivery.warehouse;
+    out.warehouse = {
+      ref: w.ref,
+      name: w.name ?? '',
+      number: w.number ?? '',
+      shortAddress: w.shortAddress ?? '',
+      type: DELIVERY_TYPES.includes(w.type) ? w.type : delivery.type,
+    };
+  }
+  return out;
+}
 
 /**
  * Серверна перевірка заявки.
@@ -12,7 +55,7 @@ import { productForSize } from '../config/products.js';
  */
 
 const TEXT_FIELDS = [...VALIDATED_FIELDS, 'size'];
-const ALLOWED_FIELDS = [...TEXT_FIELDS, 'utm', 'upsell'];
+const ALLOWED_FIELDS = [...TEXT_FIELDS, 'utm', 'upsell', 'delivery'];
 const MAX_FIELD_LENGTH = 200;
 
 const isPlainObject = (value) =>
@@ -98,6 +141,11 @@ export function validateLead(payload) {
 
   const utm = validateUtm(payload.utm, errors);
 
+  // Доставка: спершу невідомі ключі, потім форма об'єкта.
+  rejectUnknownDeliveryKeys(payload.delivery, errors);
+  const deliveryResult = validateDelivery(payload.delivery);
+  Object.assign(errors, deliveryResult.errors);
+
   if (Object.keys(errors).length > 0) return { valid: false, errors };
 
   // Ті самі правила, що й у браузері.
@@ -112,6 +160,7 @@ export function validateLead(payload) {
       ...values,
       phone: normalizePhone(values.phone),
       upsell: payload.upsell === true,
+      delivery: cleanDelivery(payload.delivery),
       utm,
     },
   };

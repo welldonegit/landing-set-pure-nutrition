@@ -9,6 +9,7 @@ import {
   TelegramSendFailedError,
 } from '../services/lead-service.js';
 import { createKeycrmOrder } from '../services/keycrm-service.js';
+import { verifyWarehouse } from '../services/nova-poshta-service.js';
 import { productForSize } from '../config/products.js';
 import { saveLead, recordDelivery } from '../services/lead-storage.js';
 import { leadsRateLimit } from '../middleware/rate-limit.js';
@@ -82,9 +83,35 @@ leadsRouter.post('/leads', leadsRateLimit, async (req, res) => {
     });
   }
 
+  // Точку видачі звіряємо з НП: чи належить вона обраному місту й типу.
+  // Якщо НП недоступна — не блокуємо замовлення (заявка не має губитися),
+  // лише логуємо пропуск перевірки.
+  if (lead.delivery.type !== 'doors') {
+    const { city, warehouse, type } = lead.delivery;
+    try {
+      const belongs = await verifyWarehouse({
+        cityRef: city.ref,
+        type,
+        ref: warehouse.ref,
+        number: warehouse.number,
+      });
+      if (!belongs) {
+        logApiEvent('warn', req, 'delivery_rejected', { status: 400, code: 'VALIDATION_ERROR' });
+        return res.status(400).json({
+          ok: false,
+          code: 'VALIDATION_ERROR',
+          message: 'Перевірте правильність заповнення полів',
+          errors: { 'delivery.warehouse': 'Точку видачі не знайдено в обраному місті' },
+        });
+      }
+    } catch {
+      logApiEvent('warn', req, 'delivery_verify_skipped', { code: 'NOVA_POSHTA_UNAVAILABLE' });
+    }
+  }
+
   const leadId = randomUUID();
   const createdAt = new Date().toISOString();
-  const { utm, ...leadFields } = lead; // leadFields: name,phone,email,branch,size,upsell
+  const { utm, ...leadFields } = lead; // leadFields: name,phone,email,size,upsell,delivery
   const utmFields = Object.keys(utm ?? {});
   const sku = productForSize(leadFields.size)?.sku;
 

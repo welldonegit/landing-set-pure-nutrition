@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import express from 'express';
 
 import { leadsRouter } from './routes/leads.js';
+import { novaPoshtaRouter } from './routes/nova-poshta.js';
 import { requestContext, logApiEvent } from './logger.js';
 
 const PORT = config.port;
@@ -26,6 +27,7 @@ export function createServer() {
 
   app.get('/api/health', (_req, res) => res.json({ ok: true, env: NODE_ENV }));
   app.use('/api', leadsRouter);
+  app.use('/api/nova-poshta', novaPoshtaRouter);
 
   // Невідомий шлях під /api не має провалюватись у статику.
   app.use('/api', (req, res) => {

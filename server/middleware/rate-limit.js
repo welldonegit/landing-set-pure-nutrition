@@ -27,3 +27,18 @@ export const leadsRateLimit = rateLimit({
     });
   },
 });
+
+/**
+ * Обмеження для пошуку в довідниках. М'якше за заявки — autocomplete шле
+ * запит майже на кожне натискання, тож ліміт вищий, а вікно коротше.
+ */
+export const searchRateLimit = rateLimit({
+  windowMs: 60 * 1000, // 1 хвилина
+  limit: 60,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  handler: (req, res) => {
+    logApiEvent('warn', req, 'search_rate_limited', { status: 429, code: 'RATE_LIMITED' });
+    res.status(429).json({ ok: false, code: 'RATE_LIMITED', message: 'Забагато запитів. Зачекайте трохи.' });
+  },
+});

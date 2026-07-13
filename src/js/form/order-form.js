@@ -3,6 +3,7 @@ import { submitOrder, ValidationError } from './submit.js';
 import { initPhoneMask } from './phone-mask.js';
 import { normalizePhone } from '../../../shared/phone.js';
 import { isUpsellEnabled } from '../features/upsell.js';
+import { getDelivery, validateDeliveryUI } from '../features/delivery.js';
 import { qs } from '../utils/dom.js';
 
 const FIELDS = [...VALIDATED_FIELDS, 'size'];
@@ -62,9 +63,12 @@ export function initOrderForm(root = document) {
       setFieldError(form, field, errors[field]);
     }
 
-    if (!valid) {
+    // Доставка перевіряється окремо і показує власні помилки.
+    const deliveryValid = validateDeliveryUI();
+
+    if (!valid || !deliveryValid) {
       setStatus(statusEl, null);
-      form.elements[VALIDATED_FIELDS.find((f) => errors[f])]?.focus();
+      if (!valid) form.elements[VALIDATED_FIELDS.find((f) => errors[f])]?.focus();
       return;
     }
 
@@ -73,6 +77,7 @@ export function initOrderForm(root = document) {
       ...values,
       phone: normalizePhone(values.phone),
       upsell: isUpsellEnabled(),
+      delivery: getDelivery(),
     };
 
     // Захист від подвійного надсилання, поки триває запит.

@@ -12,6 +12,7 @@ import { initPaymentMethod } from './features/payment-method.js';
 import { initCalculator } from './features/calculator.js';
 import { initPriceTable } from './features/price-table.js';
 import { initOrderForm } from './form/order-form.js';
+import { initDelivery } from './features/delivery.js';
 import { initStickyCta } from './features/sticky-cta.js';
 import { captureUtm } from './utils/utm.js';
 
@@ -30,5 +31,6 @@ initUpsell();
 initPaymentMethod();
 initCalculator();
 initPriceTable();
+initDelivery();
 initOrderForm();
 initStickyCta();

@@ -1,5 +1,6 @@
 import { config } from '../config/env.js';
 import { UTM_FIELDS, UTM_LABELS } from '../../shared/utm.js';
+import { DELIVERY_LABELS } from '../../shared/delivery.js';
 
 /**
  * Надсилання заявки менеджеру в Telegram.
@@ -46,6 +47,27 @@ const EMPTY = '—';
  * Текст заявки. parse_mode свідомо не використовуємо: без нього Telegram
  * показує рядок як є, і розмітку в даних клієнта підробити неможливо.
  */
+/** Рядки доставки: спосіб, місто та адреса або точка видачі. */
+function deliveryLines(delivery) {
+  if (!delivery) return [`Доставка: ${EMPTY}`];
+
+  const method = DELIVERY_LABELS[delivery.type] ?? delivery.type;
+  const lines = [
+    `Спосіб доставки: ${singleLine(method)}`,
+    `Місто: ${singleLine(delivery.city?.name) || EMPTY}`,
+  ];
+
+  if (delivery.type === 'doors') {
+    lines.push(`Адреса: ${singleLine(delivery.address) || EMPTY}`);
+  } else {
+    const w = delivery.warehouse ?? {};
+    const point = singleLine(w.name) || (w.number ? `№${singleLine(w.number)}` : EMPTY);
+    const short = singleLine(w.shortAddress);
+    lines.push(`Точка видачі: ${point}${short ? ` (${short})` : ''}`);
+  }
+  return lines;
+}
+
 export function formatLeadMessage(lead) {
   const utm = lead.utm ?? {};
 
@@ -60,8 +82,10 @@ export function formatLeadMessage(lead) {
     `Імʼя: ${singleLine(lead.name) || EMPTY}`,
     `Телефон: ${singleLine(lead.phone) || EMPTY}`,
     `Email: ${singleLine(lead.email) || EMPTY}`,
-    `Відділення: ${singleLine(lead.branch) || EMPTY}`,
     `Сет: ${singleLine(lead.size) || EMPTY}`,
+    '',
+    '🚚 Доставка:',
+    ...deliveryLines(lead.delivery),
     '',
     '📊 UTM Мітки:',
     ...utmLines,

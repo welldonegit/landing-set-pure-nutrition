@@ -1,6 +1,7 @@
 import { config } from '../config/env.js';
 import { productForSize, UPSELL } from '../config/products.js';
 import { UTM_FIELDS } from '../../shared/utm.js';
+import { describeDelivery } from '../../shared/delivery.js';
 
 /**
  * Створення замовлення в KeyCRM.
@@ -64,6 +65,16 @@ export function buildOrderPayload(lead) {
     products.push({ sku: UPSELL.sku, price: UPSELL.price, quantity: 1 });
   }
 
+  // Людський опис доставки — у офіційне shipping_receive_point.
+  const deliveryText = describeDelivery(lead.delivery);
+
+  // warehouse.ref немає куди покласти в офіційній схемі shipping, тож
+  // додаємо його в коментар, щоб менеджер бачив точний ідентифікатор точки.
+  const warehouseRef = lead.delivery?.warehouse?.ref;
+  const comment = warehouseRef
+    ? `${BUYER_COMMENT}\nДоставка: ${deliveryText}\nWarehouseRef: ${warehouseRef}`
+    : `${BUYER_COMMENT}\nДоставка: ${deliveryText}`;
+
   const payload = {
     source_id: config.keycrm.sourceId,
     source_uuid: lead.leadId,
@@ -74,9 +85,9 @@ export function buildOrderPayload(lead) {
     },
     products,
     shipping: {
-      shipping_receive_point: lead.branch,
+      shipping_receive_point: deliveryText,
     },
-    buyer_comment: BUYER_COMMENT,
+    buyer_comment: comment,
   };
 
   const marketing = marketingBlock(lead.utm);

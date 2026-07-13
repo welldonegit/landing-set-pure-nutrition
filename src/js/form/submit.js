@@ -53,7 +53,7 @@ const parseJson = async (response) => {
 };
 
 /**
- * @param {{name: string, phone: string, email: string, branch: string, size: string}} order
+ * @param {{name: string, phone: string, email: string, size: string, delivery: object}} order
  *        phone уже нормалізований: +380XXXXXXXXX
  * @returns {Promise<object>} — тіло відповіді, лише якщо заявку справді доставлено
  */
