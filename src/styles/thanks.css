@@ -79,6 +79,33 @@ body {
   margin: 0;
 }
 
+.thanks__cta {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  background: var(--accent);
+  color: var(--ink);
+  text-decoration: none;
+  font: 800 15px var(--font);
+  padding: 12px 26px;
+  border-radius: 99px;
+  border: 2px solid var(--accent);
+}
+
+/* Друга дія — контурна, щоб не сперечалася з основною кнопкою реєстрації. */
+.thanks__cta--outline {
+  margin-top: 0;
+  background: transparent;
+  border-color: var(--accent-ink);
+  color: var(--accent-ink);
+}
+
+.thanks__promo-alt {
+  font: 500 14px var(--font);
+  color: var(--ink-muted);
+  margin: 16px 0 8px;
+}
+
 .thanks__link {
   font: 700 16px var(--font);
   color: var(--accent-ink);
