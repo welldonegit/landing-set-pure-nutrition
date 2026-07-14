@@ -54,7 +54,29 @@ body {
 .thanks__text {
   font: 500 18px/1.55 var(--font);
   color: var(--ink-muted);
-  margin: 18px 0 34px;
+  margin: 18px 0 22px;
+}
+
+/* Блок акції — той самий світло-зелений стиль, що й «вигідні» картки на головній. */
+.thanks__promo {
+  background: #f1f7e3;
+  border: 1px solid #dcebbf;
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin: 0 0 28px;
+  text-align: left;
+}
+
+.thanks__promo-title {
+  font: 800 15px var(--font);
+  color: var(--accent-ink);
+  margin: 0 0 6px;
+}
+
+.thanks__promo-text {
+  font: 500 15px/1.5 var(--font);
+  color: var(--ink);
+  margin: 0;
 }
 
 .thanks__link {
