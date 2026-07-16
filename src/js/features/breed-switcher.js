@@ -12,8 +12,11 @@ export const currentBreed = () => breed;
 /** Підписка на зміну лінійки. */
 export const onBreedChange = (fn) => listeners.add(fn);
 
+// Малі породи — jpg, великі — нові фото great pack (large2).
 const packSrc = (flavor) =>
-  `images/pack-${flavor}${breed === 'large' ? '-large' : ''}.jpg`;
+  breed === 'large'
+    ? `images/pack-${flavor}-large2.jpg`
+    : `images/pack-${flavor}.jpg`;
 
 /** Перемикач лінійки: міняє фото пачок, вміст м'яса та підпис гранули. */
 export function initBreedSwitcher(root = document) {
